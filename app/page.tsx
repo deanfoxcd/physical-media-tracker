@@ -1,10 +1,5 @@
-import { Button, Stack, Typography } from "@mui/material";
+import MovieSearch from "@/components/Search";
 
 export default function Home() {
-  return (
-    <Stack>
-      <Typography sx={{ fontWeight: "bold" }}>Testing</Typography>
-      <Button variant="contained">Test button</Button>
-    </Stack>
-  );
+  return <MovieSearch />;
 }
