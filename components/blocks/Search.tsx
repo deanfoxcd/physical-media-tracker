@@ -2,9 +2,9 @@
 
 import { Box, Button, Stack, TextField } from "@mui/material";
 import { MediaCard } from "./MediaCard";
-import { ButtonSolid } from "./ButtonSolid";
 import localization from "@/locales/en";
 import { useMovieSearch } from "@/hooks/useSearch";
+import { ActionButton } from "./ActionButton";
 
 export const Search = () => {
   const { query, setQuery, results, loading, hasMore, search, loadMore } =
@@ -32,11 +32,11 @@ export const Search = () => {
       ))}
 
       {hasMore && (
-        <ButtonSolid onClick={loadMore} disabled={loading}>
+        <ActionButton onClick={loadMore} disabled={loading}>
           {loading
             ? localization.search.loadMoreLoading
             : localization.search.loadMore}
-        </ButtonSolid>
+        </ActionButton>
       )}
     </Stack>
   );

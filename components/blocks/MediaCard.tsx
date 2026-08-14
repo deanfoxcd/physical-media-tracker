@@ -1,11 +1,14 @@
+"use client";
+
 import { TmdbMultiResult } from "@/types/tmdb";
 import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import { ButtonSolid } from "./ButtonSolid";
 import { PaddedPaper } from "./PaddedPaper";
 import { useState } from "react";
 import { SavedMedia } from "@/types/media";
-import { addSavedMedia, deleteSavedMedia } from "@/services/media";
+import { ActionButton } from "./ActionButton";
+import { AddToCollectionForm } from "./AddToCollectionForm";
+import { deleteSavedMedia } from "@/services/media";
 import localization from "@/locales/en";
 
 type MediaCardProps =
@@ -15,37 +18,13 @@ type MediaCardProps =
 const POSTER_BASE = "https://image.tmdb.org/t/p/w154";
 
 export const MediaCard = ({ item, savedItem }: MediaCardProps) => {
-  const [saving, setSaving] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [removing, setRemoving] = useState(false);
 
   const media = item ?? savedItem;
   if (!media || media.media_type === "person") return null;
-
-  async function handleAddToCollection() {
-    if (!item || item.media_type === "person") return;
-
-    const { id, ...rest } = item;
-    const newSavedMedia: SavedMedia = {
-      ...rest,
-      tmdbId: id,
-      format: "dvd",
-      condition: "",
-      acquiredFrom: "",
-      acquiredDate: "",
-      pricePaid: 0,
-      notes: "",
-      review: "",
-    };
-
-    setSaving(true);
-    try {
-      await addSavedMedia(newSavedMedia);
-      setSaved(true);
-    } finally {
-      setSaving(false);
-    }
-  }
+  if (item && item.media_type === "person") return null;
 
   async function handleRemove() {
     if (!savedItem) return;
@@ -84,23 +63,31 @@ export const MediaCard = ({ item, savedItem }: MediaCardProps) => {
         <Stack spacing={1}>
           {item && (
             <>
-              <ButtonSolid
-                onClick={handleAddToCollection}
-                disabled={saving || saved}
+              <ActionButton
+                onClick={() => setDialogOpen(true)}
+                disabled={saved}
               >
                 {saved
                   ? localization.mediaCard.added
-                  : saving
-                    ? localization.mediaCard.adding
-                    : localization.mediaCard.addToCollection}
-              </ButtonSolid>
-              <ButtonSolid>Add to Watchlist</ButtonSolid>
+                  : localization.mediaCard.addToCollection}
+              </ActionButton>
+              <ActionButton>
+                {localization.mediaCard.addToWishlist}
+              </ActionButton>
+              <AddToCollectionForm
+                item={item}
+                open={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                onSaved={() => setSaved(true)}
+              />
             </>
           )}
           {savedItem && (
-            <ButtonSolid onClick={handleRemove} disabled={removing}>
-              {removing ? "Removing..." : "Remove"}
-            </ButtonSolid>
+            <ActionButton onClick={handleRemove} disabled={removing}>
+              {removing
+                ? localization.mediaCard.removing
+                : localization.mediaCard.remove}
+            </ActionButton>
           )}
         </Stack>
       </Stack>

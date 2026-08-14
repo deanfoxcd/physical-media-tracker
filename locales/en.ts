@@ -14,8 +14,10 @@ const en = {
   mediaCard: {
     added: "Added",
     adding: "Adding...",
-    addToCollection: "Added to Collection",
-    removeFromCollection: "Removed from Collection",
+    remove: "Remove",
+    removing: "Removing...",
+    addToCollection: "Add to Collection",
+    addToWishlist: "Add to Wishlist",
   },
   collection: {
     empty: "Your collection is empty",

@@ -1,8 +1,8 @@
 import { TmdbMovie, TmdbTvShow } from "./tmdb";
 
-interface SavedMediaFields {
+export interface SavedMediaFields {
   tmdbId: number;
-  format: "dvd" | "bluray" | "4K" | "3D" | "4K 3D" | "digital";
+  format: "dvd" | "blu-ray" | "4K" | "3D" | "4K 3D" | "digital";
   condition: string;
   acquiredFrom: string;
   acquiredDate: string;
