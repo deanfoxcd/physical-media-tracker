@@ -1,10 +1,36 @@
+"use client";
+
 import { Button } from "@mui/material";
+import Link from "next/link";
 
-type ButtonSolidProps = React.ComponentProps<typeof Button>;
+interface ButtonSolidProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  href?: string;
+}
 
-export const ButtonSolid = ({ children, ...props }: ButtonSolidProps) => {
+export const ButtonSolid = ({
+  children,
+  onClick,
+  disabled,
+  href,
+}: ButtonSolidProps) => {
+  if (href) {
+    return (
+      <Button
+        variant="contained"
+        component={Link}
+        href={href}
+        disabled={disabled}
+      >
+        {children}
+      </Button>
+    );
+  }
+
   return (
-    <Button variant="contained" {...props}>
+    <Button variant="contained" onClick={onClick} disabled={disabled}>
       {children}
     </Button>
   );
