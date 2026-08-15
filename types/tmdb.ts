@@ -29,3 +29,7 @@ export interface TmdbSearchResponse {
   page: number;
   total_pages: number;
 }
+
+export interface TmdbExternalIds {
+  imdb_id: string | null;
+}

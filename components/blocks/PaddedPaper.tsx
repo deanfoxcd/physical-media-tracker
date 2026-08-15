@@ -1,12 +1,15 @@
-import { Paper } from "@mui/material";
+import { Paper, type SxProps, type Theme } from "@mui/material";
 
-export const PaddedPaper = ({ children }: { children: React.ReactNode }) => {
+interface PaddedPaperProps {
+  children: React.ReactNode;
+  sx?: SxProps<Theme>;
+}
+
+export const PaddedPaper = ({ children, sx }: PaddedPaperProps) => {
   return (
     <Paper
       square={false}
-      sx={{
-        padding: "15px",
-      }}
+      sx={[{ padding: "15px" }, ...(Array.isArray(sx) ? sx : [sx])]}
     >
       {children}
     </Paper>

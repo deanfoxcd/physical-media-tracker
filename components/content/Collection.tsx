@@ -5,26 +5,41 @@ import { useSavedMedia } from "@/hooks/useSavedMedia";
 import localization from "@/locales/en";
 import { MediaCard } from "../blocks/MediaCard";
 import { ActionButton } from "../blocks/ActionButton";
+import { PaddedPaper } from "../blocks/PaddedPaper";
 
 export const Collection = () => {
-  const { items, loading } = useSavedMedia();
+  const { items, removeItem, updateItem, loading } = useSavedMedia();
 
   if (loading) return <Typography>Loading...</Typography>;
-  if (items.length === 0) return <Typography>No saved items yet.</Typography>;
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h4">{localization.collection.title}</Typography>
+      <Typography variant="h4" sx={{ alignItems: "center" }}>
+        {localization.collection.title}
+      </Typography>
       <Box>
         <ActionButton minor href="/">
           Back to search
         </ActionButton>
       </Box>
-      <Stack spacing={2}>
-        {items.map((item) => (
-          <MediaCard key={item.id} savedItem={item} />
-        ))}
-      </Stack>
+      {items.length === 0 ? (
+        <Typography>No saved items yet.</Typography>
+      ) : (
+        <Stack spacing={2}>
+          <PaddedPaper sx={{ width: "70%", alignSelf: "center" }}>
+            <Stack spacing={3}>
+              {items.map((item) => (
+                <MediaCard
+                  key={item.id}
+                  savedItem={item}
+                  onRemoved={removeItem}
+                  onUpdated={updateItem}
+                />
+              ))}
+            </Stack>
+          </PaddedPaper>
+        </Stack>
+      )}
     </Stack>
   );
 };

@@ -5,7 +5,7 @@ import localization from "../../locales/en";
 import { useSavedMedia } from "@/hooks/useSavedMedia";
 
 export const Wishlist = () => {
-  const { items, loading } = useSavedMedia();
+  const { items, loading, removeItem, updateItem } = useSavedMedia();
 
   return (
     <Stack spacing={2}>
@@ -17,7 +17,12 @@ export const Wishlist = () => {
       </Box>
       <Stack spacing={2}>
         {items.map((item) => (
-          <MediaCard key={item.id} savedItem={item} />
+          <MediaCard
+            key={item.id}
+            savedItem={item}
+            onRemoved={removeItem}
+            onUpdated={updateItem}
+          />
         ))}
       </Stack>
     </Stack>

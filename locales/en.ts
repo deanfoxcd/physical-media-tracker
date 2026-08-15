@@ -23,6 +23,16 @@ const en = {
     empty: "Your collection is empty",
     title: "My Collection",
   },
+  savedMediaDetails: {
+    format: "Format:",
+    condition: "Condition:",
+    acquiredFrom: "Acquired from:",
+    acquiredDate: "Acquired date:",
+    pricePaid: "Price paid:",
+    notes: "Notes:",
+    review: "Review:",
+    rating: "Rating:",
+  },
 } as const;
 
 export default en;
