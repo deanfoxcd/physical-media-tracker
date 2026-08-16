@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { getAllSavedMedia } from "@/services/media";
+import { getAllSavedMedia, getSavedMediaByStatus } from "@/services/media";
 import type { SavedMedia, SavedMediaUpdates } from "@/types/media";
 
-export function useSavedMedia() {
+export function useSavedMedia(status?: "owned" | "wishlist") {
   const [items, setItems] = useState<(SavedMedia & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllSavedMedia()
-      .then(setItems)
-      .finally(() => setLoading(false));
-  }, []);
+    const fetchItems = status
+      ? getSavedMediaByStatus(status)
+      : getAllSavedMedia();
+    fetchItems.then(setItems).finally(() => setLoading(false));
+  }, [status]);
 
   function removeItem(id: string) {
     setItems((prev) => prev.filter((item) => item.id !== id));
@@ -19,13 +20,16 @@ export function useSavedMedia() {
   // Safe: edits never change media_type, so the merged shape always
   // matches item's original variant even though TS can't prove it here.
   function updateItem(id: string, updates: SavedMediaUpdates) {
-    setItems((prev) =>
-      prev.map((item) =>
+    setItems((prev) => {
+      if (status && "status" in updates && updates.status !== status) {
+        return prev.filter((item) => item.id !== id);
+      }
+      return prev.map((item) =>
         item.id === id
           ? ({ ...item, ...updates } as SavedMedia & { id: string })
           : item,
-      ),
-    );
+      );
+    });
   }
 
   return { items, loading, removeItem, updateItem };

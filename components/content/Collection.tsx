@@ -8,7 +8,7 @@ import { ActionButton } from "../blocks/ActionButton";
 import { PaddedPaper } from "../blocks/PaddedPaper";
 
 export const Collection = () => {
-  const { items, removeItem, updateItem, loading } = useSavedMedia();
+  const { items, removeItem, updateItem, loading } = useSavedMedia("owned");
 
   if (loading) return <Typography>Loading...</Typography>;
 
@@ -26,7 +26,7 @@ export const Collection = () => {
         <Typography>No saved items yet.</Typography>
       ) : (
         <Stack spacing={2}>
-          <PaddedPaper sx={{ width: "70%", alignSelf: "center" }}>
+          <PaddedPaper sx={{ width: "80%", alignSelf: "center" }}>
             <Stack spacing={3}>
               {items.map((item) => (
                 <MediaCard

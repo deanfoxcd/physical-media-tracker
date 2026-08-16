@@ -29,7 +29,11 @@ export const SavedMediaDetails = ({
       ...values,
       pricePaid: values.pricePaid === "" ? 0 : values.pricePaid,
     };
-    await updateSavedMedia(savedItem.id, updates);
+    await updateSavedMedia(
+      savedItem.id,
+      updates,
+      localization.savedMediaDetails.savedToCollection,
+    );
     onUpdated?.(savedItem.id, updates);
     setEditing(false);
   }
@@ -44,7 +48,7 @@ export const SavedMediaDetails = ({
               condition: savedItem.condition,
               acquiredFrom: savedItem.acquiredFrom,
               acquiredDate: savedItem.acquiredDate,
-              pricePaid: savedItem.pricePaid,
+              pricePaid: savedItem.pricePaid ?? "",
               notes: savedItem.notes,
               review: savedItem.review,
               rating: savedItem.rating,

@@ -1,17 +1,34 @@
 "use client";
 
 import { TmdbMultiResult } from "@/types/tmdb";
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import { PaddedPaper } from "./PaddedPaper";
 import { useState } from "react";
-import { SavedMedia, SavedMediaUpdates } from "@/types/media";
+import { SavedMedia, SavedMediaFields, SavedMediaUpdates } from "@/types/media";
 import { ActionButton } from "./ActionButton";
 import { AddToCollectionForm } from "./AddToCollectionForm";
-import { deleteSavedMedia } from "@/services/media";
+import {
+  addSavedMedia,
+  deleteSavedMedia,
+  updateSavedMedia,
+} from "@/services/media";
 import localization from "@/locales/en";
 import { SavedMediaDetails } from "./SavedMediaDetails";
 import { LiveTv, Movie } from "@mui/icons-material";
+import { fetchImdbId } from "@/lib/tmdbClient";
+import { FORMAT_OPTIONS } from "@/constants/formatOptions";
+import { MediaDetailsForm, MediaDetailsFormValues } from "./MediaDetailsForm";
+import { POSTER_BASE } from "@/constants/poster";
+import { DEFAULT_FORM_VALUES } from "@/constants/addToCollectionFormValues";
 
 type MediaCardProps =
   | {
@@ -27,8 +44,6 @@ type MediaCardProps =
       onUpdated?: (id: string, updates: SavedMediaUpdates) => void;
     };
 
-const POSTER_BASE = "https://image.tmdb.org/t/p/w154";
-
 export const MediaCard = ({
   item,
   savedItem,
@@ -37,12 +52,40 @@ export const MediaCard = ({
 }: MediaCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [moveToCollectionOpen, setMoveToCollectionOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [wishlistAnchorEl, setWishlistAnchorEl] = useState<null | HTMLElement>(
+    null,
+  );
+  const [addingToWishlist, setAddingToWishlist] = useState(false);
+  const [addedToWishlist, setAddedToWishlist] = useState(false);
 
   const media = item ?? savedItem;
   if (!media || media.media_type === "person") return null;
   if (item && item.media_type === "person") return null;
+
+  async function handleAddToWishlist(format: SavedMediaFields["format"]) {
+    if (!item || item.media_type === "person") return;
+
+    setWishlistAnchorEl(null);
+    setAddingToWishlist(true);
+    try {
+      const { id, ...rest } = item;
+      const imdbId = await fetchImdbId(item.media_type, id);
+      const newSavedMedia: SavedMedia = {
+        ...rest,
+        tmdbId: id,
+        imdbId,
+        status: "wishlist",
+        format,
+      };
+      await addSavedMedia(newSavedMedia);
+      setAddedToWishlist(true);
+    } finally {
+      setAddingToWishlist(false);
+    }
+  }
 
   async function handleRemove() {
     if (!savedItem) return;
@@ -54,6 +97,38 @@ export const MediaCard = ({
       setRemoving(false);
     }
   }
+
+  async function handleMoveToCollection(values: MediaDetailsFormValues) {
+    if (!savedItem) return;
+    const updates: SavedMediaUpdates = {
+      ...values,
+      status: "owned",
+      pricePaid: values.pricePaid === "" ? 0 : values.pricePaid,
+    };
+    await updateSavedMedia(savedItem.id, updates, "Moved to Collection");
+    onUpdated?.(savedItem.id, updates);
+    setMoveToCollectionOpen(false);
+  }
+
+  const seeDetailsButton = (
+    <ActionButton onClick={() => setDetailsOpen(true)}>
+      See details
+    </ActionButton>
+  );
+
+  const addToCollectionButton = (
+    <ActionButton onClick={() => setDialogOpen(true)} disabled={saved}>
+      {saved
+        ? localization.mediaCard.added
+        : localization.mediaCard.addToCollection}
+    </ActionButton>
+  );
+
+  const moveToCollectionButton = (
+    <ActionButton onClick={() => setMoveToCollectionOpen(true)}>
+      {localization.mediaCard.addToCollection}
+    </ActionButton>
+  );
 
   return (
     <PaddedPaper>
@@ -92,17 +167,31 @@ export const MediaCard = ({
           <Stack spacing={1} sx={{ justifyContent: "center" }}>
             {item && (
               <>
+                {addToCollectionButton}
                 <ActionButton
-                  onClick={() => setDialogOpen(true)}
-                  disabled={saved}
+                  onClick={(e) => setWishlistAnchorEl(e.currentTarget)}
+                  disabled={addingToWishlist || addedToWishlist}
                 >
-                  {saved
+                  {addedToWishlist
                     ? localization.mediaCard.added
-                    : localization.mediaCard.addToCollection}
+                    : addingToWishlist
+                      ? localization.mediaCard.adding
+                      : localization.mediaCard.addToWishlist}
                 </ActionButton>
-                <ActionButton>
-                  {localization.mediaCard.addToWishlist}
-                </ActionButton>
+                <Menu
+                  anchorEl={wishlistAnchorEl}
+                  open={Boolean(wishlistAnchorEl)}
+                  onClose={() => setWishlistAnchorEl(null)}
+                >
+                  {FORMAT_OPTIONS.map((format) => (
+                    <MenuItem
+                      key={format}
+                      onClick={() => handleAddToWishlist(format)}
+                    >
+                      {format}
+                    </MenuItem>
+                  ))}
+                </Menu>
                 <AddToCollectionForm
                   item={item}
                   open={dialogOpen}
@@ -115,9 +204,9 @@ export const MediaCard = ({
             {savedItem && (
               <Stack spacing={1} sx={{ justifyContent: "center" }}>
                 <Stack spacing={2}>
-                  <ActionButton onClick={() => setDetailsOpen(true)}>
-                    See details
-                  </ActionButton>
+                  {savedItem.status === "owned"
+                    ? seeDetailsButton
+                    : moveToCollectionButton}
                   <ActionButton onClick={handleRemove} disabled={removing}>
                     {removing
                       ? localization.mediaCard.removing
@@ -130,6 +219,23 @@ export const MediaCard = ({
                   onClose={() => setDetailsOpen(false)}
                   onUpdated={onUpdated}
                 />
+                <Dialog
+                  open={moveToCollectionOpen}
+                  onClose={() => setMoveToCollectionOpen(false)}
+                  fullWidth
+                  maxWidth="sm"
+                >
+                  <DialogContent>
+                    <MediaDetailsForm
+                      defaultValues={{
+                        ...DEFAULT_FORM_VALUES,
+                        format: savedItem.format,
+                      }}
+                      onSubmit={handleMoveToCollection}
+                      onCancel={() => setMoveToCollectionOpen(false)}
+                    />
+                  </DialogContent>
+                </Dialog>
               </Stack>
             )}
           </Stack>

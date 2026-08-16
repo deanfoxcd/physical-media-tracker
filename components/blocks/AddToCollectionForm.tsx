@@ -6,6 +6,8 @@ import {
 import { SavedMedia } from "@/types/media";
 import { TmdbMovie, TmdbTvShow } from "@/types/tmdb";
 import { addSavedMedia } from "@/services/media";
+import { fetchImdbId } from "@/lib/tmdbClient";
+import { DEFAULT_FORM_VALUES } from "@/constants/addToCollectionFormValues";
 
 interface AddToCollectionFormProps {
   item: TmdbMovie | TmdbTvShow;
@@ -13,17 +15,6 @@ interface AddToCollectionFormProps {
   onClose: () => void;
   onSaved?: () => void;
 }
-
-const defaultFormValues: MediaDetailsFormValues = {
-  format: "DVD",
-  condition: "",
-  acquiredFrom: "",
-  acquiredDate: "",
-  pricePaid: "",
-  notes: "",
-  review: "",
-  rating: "",
-};
 
 export const AddToCollectionForm = ({
   item,
@@ -33,14 +24,13 @@ export const AddToCollectionForm = ({
 }: AddToCollectionFormProps) => {
   async function handleSubmit(values: MediaDetailsFormValues) {
     const { id, ...rest } = item;
-    const { imdb_id } = await fetch(
-      `/api/tmdb/externalIds?mediaType=${item.media_type}&id=${id}`,
-    ).then((r) => r.json());
+    const imdbId = await fetchImdbId(item.media_type, id);
 
     const newSavedMedia: SavedMedia = {
       ...rest,
       tmdbId: id,
-      imdbId: imdb_id,
+      imdbId,
+      status: "owned",
       ...values,
       pricePaid: values.pricePaid === "" ? 0 : values.pricePaid,
     };
@@ -53,7 +43,7 @@ export const AddToCollectionForm = ({
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogContent>
         <MediaDetailsForm
-          defaultValues={defaultFormValues}
+          defaultValues={DEFAULT_FORM_VALUES}
           onSubmit={handleSubmit}
           onCancel={onClose}
         />

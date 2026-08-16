@@ -32,6 +32,10 @@ const en = {
     notes: "Notes:",
     review: "Review:",
     rating: "Rating:",
+    savedToCollection: "Saved to your Collection",
+  },
+  wishlist: {
+    movedToCollection: "Moved to your Collection",
   },
 } as const;
 

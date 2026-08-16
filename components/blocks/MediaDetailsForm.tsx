@@ -8,10 +8,11 @@ import {
 import { SavedMediaFields } from "@/types/media";
 import { Controller, useForm } from "react-hook-form";
 import { ActionButton } from "./ActionButton";
+import { FORMAT_OPTIONS } from "@/constants/formatOptions";
 
 export type MediaDetailsFormValues = Omit<
   SavedMediaFields,
-  "tmdbId" | "pricePaid" | "imdbId"
+  "tmdbId" | "pricePaid" | "imdbId" | "status"
 > & {
   pricePaid: number | "";
 };
@@ -45,13 +46,11 @@ export const MediaDetailsForm = ({
         control={control}
         render={({ field }) => (
           <TextField label="Format:" select {...field}>
-            <MenuItem value="DVD">DVD</MenuItem>
-            <MenuItem value="Blu-Ray">Blu-ray</MenuItem>
-            <MenuItem value="4K">4K</MenuItem>
-            <MenuItem value="3D">3D</MenuItem>
-            <MenuItem value="4K 3D">4K 3D</MenuItem>
-            <MenuItem value="Digital">Digital</MenuItem>
-            <MenuItem value="4K Digital">4K Digital</MenuItem>
+            {FORMAT_OPTIONS.map((format) => (
+              <MenuItem key={format} value={format}>
+                {format}
+              </MenuItem>
+            ))}
           </TextField>
         )}
       />
