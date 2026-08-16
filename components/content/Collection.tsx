@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useSavedMedia } from "@/hooks/useSavedMedia";
 import localization from "@/locales/en";
 import { MediaCard } from "../blocks/MediaCard";
@@ -10,18 +10,20 @@ import { PaddedPaper } from "../blocks/PaddedPaper";
 export const Collection = () => {
   const { items, removeItem, updateItem, loading } = useSavedMedia("owned");
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Stack spacing={2}>
       <Typography variant="h4" sx={{ alignItems: "center" }}>
         {localization.collection.title}
       </Typography>
+
       <Box>
         <ActionButton minor href="/">
           Back to search
         </ActionButton>
       </Box>
+
       {items.length === 0 ? (
         <Typography>No saved items yet.</Typography>
       ) : (

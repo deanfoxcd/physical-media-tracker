@@ -155,15 +155,16 @@ export const MediaCard = ({
         </Stack>
 
         <Stack direction="row" spacing={12}>
-          {media === savedItem ? (
-            <Stack sx={{ justifyContent: "center" }}>
+          <Stack sx={{ justifyContent: "center" }}>
+            {media === savedItem ? (
               <Stack direction="row" spacing={1}>
                 <Typography>{localization.savedMediaDetails.format}</Typography>
                 <Typography>{media.format}</Typography>
               </Stack>
-              {media.media_type === "movie" ? <Movie /> : <LiveTv />}
-            </Stack>
-          ) : null}
+            ) : null}
+            {media.media_type === "movie" ? <Movie /> : <LiveTv />}
+          </Stack>
+
           <Stack spacing={1} sx={{ justifyContent: "center" }}>
             {item && (
               <>
