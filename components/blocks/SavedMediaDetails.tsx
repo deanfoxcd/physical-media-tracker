@@ -125,7 +125,11 @@ export const SavedMediaDetails = ({
               </Stack>
             </Stack>
             <Stack direction="row" spacing={1} sx={{ alignSelf: "end" }}>
-              <ActionButton minor onClick={() => setEditing(true)}>
+              <ActionButton
+                minor
+                onClick={() => setEditing(true)}
+                sx={{ textBox: "trim-both cap alphabetic" }}
+              >
                 Edit
               </ActionButton>
               <ActionButton minor>Remove from Collection</ActionButton>

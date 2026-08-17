@@ -191,11 +191,7 @@ export const MediaCard = ({
             spacing={1}
             sx={{ alignItems: "center", mt: "auto" }}
           >
-            <Typography
-              sx={{ lineHeight: 1, position: "relative", top: "3px" }}
-            >
-              {savedItem.format}
-            </Typography>
+            <Typography>{savedItem.format}</Typography>
             {media.media_type === "movie" ? <Movie /> : <LiveTv />}
           </Stack>
         </Stack>

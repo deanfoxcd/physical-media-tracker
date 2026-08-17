@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import "./globals.css";
 import { Toaster } from "@/components/blocks/Toaster";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "@/lib/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +29,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <AppRouterCacheProvider>
-          {children}
-          <Toaster />
+          <ThemeProvider theme={theme}>
+            {children}
+            <Toaster />
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
