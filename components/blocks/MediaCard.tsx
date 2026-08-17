@@ -2,9 +2,11 @@
 
 import { TmdbMultiResult } from "@/types/tmdb";
 import {
+  Box,
   Button,
   Dialog,
   DialogContent,
+  Link,
   Menu,
   MenuItem,
   Stack,
@@ -36,12 +38,16 @@ type MediaCardProps =
       savedItem?: never;
       onRemoved?: never;
       onUpdated?: never;
+      onAdded?: (item: SavedMedia & { id: string }) => void;
+      layout?: never;
     }
   | {
       item?: never;
       savedItem: SavedMedia & { id: string };
       onRemoved: (id: string) => void;
       onUpdated?: (id: string, updates: SavedMediaUpdates) => void;
+      onAdded?: never;
+      layout?: "list" | "grid";
     };
 
 export const MediaCard = ({
@@ -49,6 +55,8 @@ export const MediaCard = ({
   savedItem,
   onRemoved,
   onUpdated,
+  onAdded,
+  layout = "grid",
 }: MediaCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -64,10 +72,10 @@ export const MediaCard = ({
   const media = item ?? savedItem;
   if (!media || media.media_type === "person") return null;
   if (item && item.media_type === "person") return null;
+  const imdbLink = `https://www.imdb.com/title/${savedItem?.imdbId}/`;
 
   async function handleAddToWishlist(format: SavedMediaFields["format"]) {
     if (!item || item.media_type === "person") return;
-
     setWishlistAnchorEl(null);
     setAddingToWishlist(true);
     try {
@@ -80,8 +88,9 @@ export const MediaCard = ({
         status: "wishlist",
         format,
       };
-      await addSavedMedia(newSavedMedia);
+      const savedItem = await addSavedMedia(newSavedMedia);
       setAddedToWishlist(true);
+      onAdded?.(savedItem);
     } finally {
       setAddingToWishlist(false);
     }
@@ -130,6 +139,73 @@ export const MediaCard = ({
     </ActionButton>
   );
 
+  const removeButton = (
+    <ActionButton onClick={handleRemove} disabled={removing}>
+      {removing
+        ? localization.mediaCard.removing
+        : localization.mediaCard.remove}
+    </ActionButton>
+  );
+
+  const primaryButton =
+    savedItem?.status === "owned" ? seeDetailsButton : moveToCollectionButton;
+
+  if (savedItem && layout === "grid") {
+    return (
+      <PaddedPaper>
+        <Stack spacing={1} sx={{ width: 180, alignItems: "center" }}>
+          {media.poster_path && (
+            <Box
+              onClick={() =>
+                savedItem.status === "owned"
+                  ? setDetailsOpen(true)
+                  : setMoveToCollectionOpen(true)
+              }
+              sx={{ cursor: "pointer" }}
+            >
+              <Image
+                src={`${POSTER_BASE}${media.poster_path}`}
+                alt={media.media_type === "movie" ? media.title : media.name}
+                width={154}
+                height={231}
+              />
+            </Box>
+          )}
+          <Link align="center" href={imdbLink}>
+            {media.media_type === "movie" ? media.title : media.name}
+          </Link>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography>{savedItem.format}</Typography>
+            {media.media_type === "movie" ? <Movie /> : <LiveTv />}
+          </Stack>
+        </Stack>
+        <SavedMediaDetails
+          savedItem={savedItem}
+          open={detailsOpen}
+          onClose={() => setDetailsOpen(false)}
+          onUpdated={onUpdated}
+        />
+        <Dialog
+          open={moveToCollectionOpen}
+          onClose={() => setMoveToCollectionOpen(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogContent>
+            <MediaDetailsForm
+              defaultValues={{
+                ...DEFAULT_FORM_VALUES,
+                format: savedItem.format,
+              }}
+              onSubmit={handleMoveToCollection}
+              onCancel={() => setMoveToCollectionOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      </PaddedPaper>
+    );
+  }
+
   return (
     <PaddedPaper>
       <Stack direction="row" sx={{ justifyContent: "space-between" }}>
@@ -157,10 +233,7 @@ export const MediaCard = ({
         <Stack direction="row" spacing={12}>
           <Stack sx={{ justifyContent: "center" }}>
             {media === savedItem ? (
-              <Stack direction="row" spacing={1}>
-                <Typography>{localization.savedMediaDetails.format}</Typography>
-                <Typography>{media.format}</Typography>
-              </Stack>
+              <Typography>{media.format}</Typography>
             ) : null}
             {media.media_type === "movie" ? <Movie /> : <LiveTv />}
           </Stack>
@@ -197,7 +270,10 @@ export const MediaCard = ({
                   item={item}
                   open={dialogOpen}
                   onClose={() => setDialogOpen(false)}
-                  onSaved={() => setSaved(true)}
+                  onSaved={(savedItem) => {
+                    setSaved(true);
+                    onAdded?.(savedItem);
+                  }}
                 />
               </>
             )}
@@ -205,14 +281,8 @@ export const MediaCard = ({
             {savedItem && (
               <Stack spacing={1} sx={{ justifyContent: "center" }}>
                 <Stack spacing={2}>
-                  {savedItem.status === "owned"
-                    ? seeDetailsButton
-                    : moveToCollectionButton}
-                  <ActionButton onClick={handleRemove} disabled={removing}>
-                    {removing
-                      ? localization.mediaCard.removing
-                      : localization.mediaCard.remove}
-                  </ActionButton>
+                  {primaryButton}
+                  {removeButton}
                 </Stack>
                 <SavedMediaDetails
                   savedItem={savedItem}

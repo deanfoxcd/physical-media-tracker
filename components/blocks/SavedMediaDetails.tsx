@@ -125,13 +125,6 @@ export const SavedMediaDetails = ({
               </Stack>
             </Stack>
             <Stack direction="row" spacing={1} sx={{ alignSelf: "end" }}>
-              {savedItem.imdbId && (
-                <ActionButton
-                  href={`https://www.imdb.com/title/${savedItem.imdbId}/`}
-                >
-                  View on IMDb
-                </ActionButton>
-              )}
               <ActionButton minor onClick={() => setEditing(true)}>
                 Edit
               </ActionButton>

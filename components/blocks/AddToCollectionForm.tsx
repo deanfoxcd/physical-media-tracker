@@ -13,7 +13,7 @@ interface AddToCollectionFormProps {
   item: TmdbMovie | TmdbTvShow;
   open: boolean;
   onClose: () => void;
-  onSaved?: () => void;
+  onSaved?: (savedItem: SavedMedia & { id: string }) => void;
 }
 
 export const AddToCollectionForm = ({
@@ -34,8 +34,8 @@ export const AddToCollectionForm = ({
       ...values,
       pricePaid: values.pricePaid === "" ? 0 : values.pricePaid,
     };
-    await addSavedMedia(newSavedMedia);
-    onSaved?.();
+    const savedItem = await addSavedMedia(newSavedMedia);
+    onSaved?.(savedItem);
     onClose();
   }
 

@@ -8,12 +8,17 @@ export function useMovieSearch() {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  async function runSearch(nextPage: number, append: boolean) {
-    if (!query.trim()) return;
+  async function runSearch(
+    nextPage: number,
+    append: boolean,
+    overrideQuery?: string,
+  ) {
+    const q = overrideQuery ?? query;
+    if (!q.trim()) return;
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/tmdb/search?q=${encodeURIComponent(query)}&page=${nextPage}`,
+        `/api/tmdb/search?q=${encodeURIComponent(q)}&page=${nextPage}`,
       );
       const data = await res.json();
       setResults((prev) => {
@@ -30,8 +35,8 @@ export function useMovieSearch() {
     }
   }
 
-  function search() {
-    runSearch(1, false);
+  function search(overrideQuery?: string) {
+    runSearch(1, false, overrideQuery);
   }
 
   function loadMore() {

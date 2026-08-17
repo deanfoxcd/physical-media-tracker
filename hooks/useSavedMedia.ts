@@ -13,6 +13,13 @@ export function useSavedMedia(status?: "owned" | "wishlist") {
     fetchItems.then(setItems).finally(() => setLoading(false));
   }, [status]);
 
+  function addItem(item: SavedMedia & { id: string }) {
+    setItems((prev) => {
+      if (status && item.status !== status) return prev;
+      return [item, ...prev];
+    });
+  }
+
   function removeItem(id: string) {
     setItems((prev) => prev.filter((item) => item.id !== id));
   }
@@ -32,5 +39,5 @@ export function useSavedMedia(status?: "owned" | "wishlist") {
     });
   }
 
-  return { items, loading, removeItem, updateItem };
+  return { items, loading, addItem, removeItem, updateItem };
 }

@@ -14,12 +14,14 @@ import { showToast } from "@/lib/toast";
 
 const mediaCollection = collection(db, "savedMedia");
 
-export async function addSavedMedia(item: SavedMedia) {
+export async function addSavedMedia(
+  item: SavedMedia,
+): Promise<SavedMedia & { id: string }> {
   const docRef = await addDoc(mediaCollection, item);
   showToast(
     item.status === "wishlist" ? "Added to Wishlist" : "Added to Collection",
   );
-  return docRef.id;
+  return { ...item, id: docRef.id };
 }
 
 export async function getAllSavedMedia(): Promise<

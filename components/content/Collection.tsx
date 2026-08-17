@@ -1,15 +1,23 @@
 "use client";
 
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
-import { useSavedMedia } from "@/hooks/useSavedMedia";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import localization from "@/locales/en";
 import { MediaCard } from "../blocks/MediaCard";
-import { ActionButton } from "../blocks/ActionButton";
-import { PaddedPaper } from "../blocks/PaddedPaper";
+import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 
-export const Collection = () => {
-  const { items, removeItem, updateItem, loading } = useSavedMedia("owned");
+interface CollectionProps {
+  items: (SavedMedia & { id: string })[];
+  loading: boolean;
+  removeItem: (id: string) => void;
+  updateItem: (id: string, updates: SavedMediaUpdates) => void;
+}
 
+export const Collection = ({
+  items,
+  loading,
+  removeItem,
+  updateItem,
+}: CollectionProps) => {
   if (loading) return <CircularProgress />;
 
   return (
@@ -18,28 +26,20 @@ export const Collection = () => {
         {localization.collection.title}
       </Typography>
 
-      <Box>
-        <ActionButton minor href="/">
-          Back to search
-        </ActionButton>
-      </Box>
-
       {items.length === 0 ? (
         <Typography>No saved items yet.</Typography>
       ) : (
         <Stack spacing={2}>
-          <PaddedPaper sx={{ width: "80%", alignSelf: "center" }}>
-            <Stack spacing={3}>
-              {items.map((item) => (
-                <MediaCard
-                  key={item.id}
-                  savedItem={item}
-                  onRemoved={removeItem}
-                  onUpdated={updateItem}
-                />
-              ))}
-            </Stack>
-          </PaddedPaper>
+          <Stack spacing={3}>
+            {items.map((item) => (
+              <MediaCard
+                key={item.id}
+                savedItem={item}
+                onRemoved={removeItem}
+                onUpdated={updateItem}
+              />
+            ))}
+          </Stack>
         </Stack>
       )}
     </Stack>

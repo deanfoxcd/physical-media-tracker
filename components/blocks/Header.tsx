@@ -1,0 +1,16 @@
+import { Link, Typography } from "@mui/material";
+import localization from "@/locales/en";
+
+export const Header = () => {
+  return (
+    <Link
+      variant="h1"
+      align="center"
+      href="/"
+      underline="none"
+      sx={{ color: "black" }}
+    >
+      {localization.pageTitle}
+    </Link>
+  );
+};

@@ -1,25 +1,28 @@
 "use client";
 
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
-import { ActionButton } from "../blocks/ActionButton";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { MediaCard } from "../blocks/MediaCard";
 import localization from "../../locales/en";
-import { useSavedMedia } from "@/hooks/useSavedMedia";
+import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 
-export const Wishlist = () => {
-  const { items, loading, removeItem, updateItem } = useSavedMedia("wishlist");
+interface WishlistProps {
+  items: (SavedMedia & { id: string })[];
+  loading: boolean;
+  removeItem: (id: string) => void;
+  updateItem: (id: string, updates: SavedMediaUpdates) => void;
+}
 
+export const Wishlist = ({
+  items,
+  loading,
+  removeItem,
+  updateItem,
+}: WishlistProps) => {
   return loading ? (
     <CircularProgress />
   ) : (
     <Stack spacing={2}>
       <Typography variant="h4">{localization.collection.title}</Typography>
-
-      <Box>
-        <ActionButton minor href="/">
-          Back to search
-        </ActionButton>
-      </Box>
 
       <Stack spacing={2}>
         {items.map((item) => (
