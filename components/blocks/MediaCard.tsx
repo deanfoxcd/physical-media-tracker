@@ -171,11 +171,31 @@ export const MediaCard = ({
               />
             </Box>
           )}
-          <Link align="center" href={imdbLink}>
+          <Link
+            align="center"
+            href={imdbLink}
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              height: "3em",
+              lineHeight: "1.5em",
+            }}
+          >
             {media.media_type === "movie" ? media.title : media.name}
           </Link>
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Typography>{savedItem.format}</Typography>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ alignItems: "center", mt: "auto" }}
+          >
+            <Typography
+              sx={{ lineHeight: 1, position: "relative", top: "3px" }}
+            >
+              {savedItem.format}
+            </Typography>
             {media.media_type === "movie" ? <Movie /> : <LiveTv />}
           </Stack>
         </Stack>

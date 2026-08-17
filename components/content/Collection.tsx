@@ -30,7 +30,12 @@ export const Collection = ({
         <Typography>No saved items yet.</Typography>
       ) : (
         <Stack spacing={2}>
-          <Stack spacing={3}>
+          <Stack
+            spacing={3}
+            direction="row"
+            sx={{ flexWrap: "wrap" }}
+            useFlexGap
+          >
             {items.map((item) => (
               <MediaCard
                 key={item.id}

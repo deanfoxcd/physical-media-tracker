@@ -1,4 +1,4 @@
-import { Link, Typography } from "@mui/material";
+import { Link } from "@mui/material";
 import localization from "@/locales/en";
 
 export const Header = () => {
