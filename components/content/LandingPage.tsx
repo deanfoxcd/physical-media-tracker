@@ -1,15 +1,14 @@
 "use client";
 
-import { Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { Search } from "../blocks/Search";
 import localization from "@/locales/en";
 import { PaddedPaper } from "../blocks/PaddedPaper";
 import React, { useState } from "react";
-import { Collection } from "./Collection";
-import { Wishlist } from "./Wishlist";
 import { Header } from "../blocks/Header";
 import { useSavedMedia } from "@/hooks/useSavedMedia";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
+import { MediaList } from "../blocks/MediaList";
 
 type Tabs = "collection" | "wishlist";
 
@@ -17,6 +16,7 @@ export const LandingPage = () => {
   const [openTab, setOpenTab] = useState<Tabs>("collection");
   const owned = useSavedMedia("owned");
   const wishlist = useSavedMedia("wishlist");
+  const [layout, setLayout] = useState<"list" | "grid">("grid");
 
   const handleOnChange = (event: React.SyntheticEvent, value: Tabs) => {
     setOpenTab(value);
@@ -53,11 +53,23 @@ export const LandingPage = () => {
             <Tab value="collection" label="My Collection" />
             <Tab value="wishlist" label="My Wishlist" />
           </Tabs>
-          {openTab === "collection" ? (
-            <Collection {...owned} />
-          ) : (
-            <Wishlist {...wishlist} updateItem={handleWishlistUpdated} />
-          )}
+          <Box sx={{ display: openTab === "collection" ? "block" : "none" }}>
+            <MediaList
+              title={localization.collection.title}
+              {...owned}
+              layout={layout}
+              onLayoutChange={setLayout}
+            />
+          </Box>
+          <Box sx={{ display: openTab === "wishlist" ? "block" : "none" }}>
+            <MediaList
+              title={localization.wishlist.title}
+              {...wishlist}
+              updateItem={handleWishlistUpdated}
+              layout={layout}
+              onLayoutChange={setLayout}
+            />
+          </Box>
         </Stack>
       </PaddedPaper>
     </Stack>

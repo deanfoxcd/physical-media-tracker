@@ -23,6 +23,10 @@ const en = {
     empty: "Your collection is empty",
     title: "My Collection",
   },
+  wishlist: {
+    movedToCollection: "Moved to your Collection",
+    title: "My Wishlist",
+  },
   savedMediaDetails: {
     format: "Format:",
     condition: "Condition:",
@@ -33,9 +37,6 @@ const en = {
     review: "Review:",
     rating: "Rating:",
     savedToCollection: "Saved to your Collection",
-  },
-  wishlist: {
-    movedToCollection: "Moved to your Collection",
   },
 } as const;
 

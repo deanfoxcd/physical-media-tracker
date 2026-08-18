@@ -174,6 +174,9 @@ export const MediaCard = ({
           <Link
             align="center"
             href={imdbLink}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             sx={{
               display: "-webkit-box",
               WebkitLineClamp: 2,
@@ -191,8 +194,8 @@ export const MediaCard = ({
             spacing={1}
             sx={{ alignItems: "center", mt: "auto" }}
           >
-            <Typography>{savedItem.format}</Typography>
             {media.media_type === "movie" ? <Movie /> : <LiveTv />}
+            <Typography>{savedItem.format}</Typography>
           </Stack>
         </Stack>
         <SavedMediaDetails

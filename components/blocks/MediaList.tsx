@@ -7,40 +7,42 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import { ViewList, GridView } from "@mui/icons-material";
 import { MediaCard } from "../blocks/MediaCard";
-import localization from "../../locales/en";
-import { SavedMedia, SavedMediaUpdates } from "@/types/media";
-import { useState } from "react";
-import { GridView, ViewList } from "@mui/icons-material";
 import { MediaCardCompact } from "../blocks/MediaCardCompact";
+import localization from "@/locales/en";
+import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 
-interface WishlistProps {
+interface MediaListProps {
+  title: string;
   items: (SavedMedia & { id: string })[];
   loading: boolean;
   removeItem: (id: string) => void;
   updateItem: (id: string, updates: SavedMediaUpdates) => void;
+  layout: "grid" | "list";
+  onLayoutChange: (layout: "grid" | "list") => void;
 }
 
-export const Wishlist = ({
+export const MediaList = ({
+  title,
   items,
   loading,
   removeItem,
   updateItem,
-}: WishlistProps) => {
-  const [layout, setLayout] = useState<"grid" | "list">("grid");
-
+  layout,
+  onLayoutChange,
+}: MediaListProps) => {
   if (loading) return <CircularProgress />;
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" sx={{ justifyContent: "space-between" }}>
-        <Typography variant="h4">{localization.collection.title}</Typography>
+        <Typography variant="h4">{title}</Typography>
 
         <ToggleButtonGroup
           value={layout}
           exclusive
-          onChange={(_, value) => value && setLayout(value)}
-          sx={{ justifyContent: "end" }}
+          onChange={(_, value) => value && onLayoutChange(value)}
         >
           <ToggleButton value="grid">
             <GridView />
@@ -52,7 +54,7 @@ export const Wishlist = ({
       </Stack>
 
       {items.length === 0 ? (
-        <Typography>No saved items yet.</Typography>
+        <Typography>{localization.collection.empty}</Typography>
       ) : layout === "grid" ? (
         <Stack spacing={3} direction="row" sx={{ flexWrap: "wrap" }} useFlexGap>
           {items.map((item) => (

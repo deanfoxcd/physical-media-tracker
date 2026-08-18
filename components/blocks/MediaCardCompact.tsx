@@ -1,12 +1,13 @@
 "use client";
 
-import { Stack, Typography } from "@mui/material";
+import { Link, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 import { POSTER_BASE } from "@/constants/poster";
 import { PaddedPaper } from "./PaddedPaper";
 import { SavedItemDialogs } from "./SavedItemDialogs";
 import { useSavedItemDialogs } from "@/hooks/useSavedItemDialogs";
+import { LiveTv, Movie } from "@mui/icons-material";
 
 interface MediaCardCompactProps {
   savedItem: SavedMedia & { id: string };
@@ -18,6 +19,7 @@ export const MediaCardCompact = ({
   onUpdated,
 }: MediaCardCompactProps) => {
   const dialogs = useSavedItemDialogs(savedItem, onUpdated);
+  const imdbLink = `https://www.imdb.com/title/${savedItem?.imdbId}/`;
 
   return (
     <PaddedPaper>
@@ -39,9 +41,22 @@ export const MediaCardCompact = ({
             height={90}
           />
         )}
-        <Typography>
-          {savedItem.media_type === "movie" ? savedItem.title : savedItem.name}
-        </Typography>
+        <Stack spacing={1}>
+          <Link href={imdbLink} onClick={(e) => e.stopPropagation()}>
+            {savedItem.media_type === "movie"
+              ? savedItem.title
+              : savedItem.name}
+          </Link>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ alignItems: "center", mt: "auto" }}
+          >
+            {savedItem.media_type === "movie" ? <Movie /> : <LiveTv />}
+            <Typography>{savedItem.format}</Typography>
+          </Stack>
+        </Stack>
       </Stack>
       <SavedItemDialogs
         savedItem={savedItem}
