@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Stack, Tab, Tabs } from "@mui/material";
 import { Search } from "../blocks/Search";
 import localization from "@/locales/en";
 import { PaddedPaper } from "../blocks/PaddedPaper";
@@ -44,7 +44,10 @@ export const LandingPage = () => {
       <Header />
 
       <Stack spacing={1}>
-        <Search onAdded={handleAdded} />
+        <Search
+          onAdded={handleAdded}
+          savedItems={[...owned.items, ...wishlist.items]}
+        />
       </Stack>
       <PaddedPaper>
         <Stack spacing={3}>

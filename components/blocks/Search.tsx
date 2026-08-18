@@ -17,15 +17,17 @@ import { useMovieSearch } from "@/hooks/useSearch";
 import { ActionButton } from "./ActionButton";
 import { MediaCard } from "./MediaCard";
 import { SavedMedia } from "@/types/media";
+import { TmdbMultiResult } from "@/types/tmdb";
 
 const PREVIEW_LIMIT = 7;
 const DEBOUNCE_MS = 500;
 
 interface SearchProps {
   onAdded?: (item: SavedMedia & { id: string }) => void;
+  savedItems?: (SavedMedia & { id: string })[];
 }
 
-export const Search = ({ onAdded }: SearchProps) => {
+export const Search = ({ onAdded, savedItems }: SearchProps) => {
   const router = useRouter();
   const { query, setQuery, results, loading, search } = useMovieSearch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -42,6 +44,14 @@ export const Search = ({ onAdded }: SearchProps) => {
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
+
+  function getExistingStatus(item: TmdbMultiResult) {
+    if (item.media_type === "person") return undefined;
+    return savedItems?.find(
+      (saved) =>
+        saved.tmdbId === item.id && saved.media_type === item.media_type,
+    )?.status;
+  }
 
   function handleShowMore() {
     setDropdownOpen(false);
@@ -109,7 +119,12 @@ export const Search = ({ onAdded }: SearchProps) => {
           <Paper elevation={4} sx={{ p: 1, maxHeight: 500, overflowY: "auto" }}>
             <Stack spacing={1}>
               {previewResults.map((item) => (
-                <MediaCard key={item.id} item={item} onAdded={onAdded} />
+                <MediaCard
+                  key={item.id}
+                  item={item}
+                  onAdded={onAdded}
+                  existingStatus={getExistingStatus(item)}
+                />
               ))}
               <ActionButton onClick={handleShowMore} minor>
                 Show More

@@ -39,6 +39,7 @@ type MediaCardProps =
       onRemoved?: never;
       onUpdated?: never;
       onAdded?: (item: SavedMedia & { id: string }) => void;
+      existingStatus?: "owned" | "wishlist";
       layout?: never;
     }
   | {
@@ -47,6 +48,7 @@ type MediaCardProps =
       onRemoved: (id: string) => void;
       onUpdated?: (id: string, updates: SavedMediaUpdates) => void;
       onAdded?: never;
+      existingStatus?: never;
       layout?: "list" | "grid";
     };
 
@@ -56,6 +58,7 @@ export const MediaCard = ({
   onRemoved,
   onUpdated,
   onAdded,
+  existingStatus,
   layout = "grid",
 }: MediaCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -237,16 +240,25 @@ export const MediaCard = ({
               height={138}
             />
           )}
-          <Button onClick={() => console.log(media)}>
-            <Typography>
-              {media.media_type === "movie" ? media.title : media.name} (
-              {(media.media_type === "movie"
-                ? media.release_date
-                : media.first_air_date
-              )?.slice(0, 4)}
-              )
-            </Typography>
-          </Button>
+          <Stack>
+            <Button onClick={() => console.log(media)}>
+              <Typography>
+                {media.media_type === "movie" ? media.title : media.name} (
+                {(media.media_type === "movie"
+                  ? media.release_date
+                  : media.first_air_date
+                )?.slice(0, 4)}
+                )
+              </Typography>
+            </Button>
+            {existingStatus && (
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                {existingStatus === "owned"
+                  ? "Also in your Collection"
+                  : "Also in your Wishlist"}
+              </Typography>
+            )}
+          </Stack>
         </Stack>
 
         <Stack direction="row" spacing={12}>
