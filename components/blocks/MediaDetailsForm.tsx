@@ -104,7 +104,7 @@ export const MediaDetailsForm = ({
         )}
       />
       <Stack direction="row" spacing={2}>
-        <ActionButton type="submit">Save</ActionButton>
+        <ActionButton type="submit">Save to Your Collection</ActionButton>
         <ActionButton onClick={onCancel} minor>
           Cancel
         </ActionButton>

@@ -2,7 +2,9 @@
 
 import {
   CircularProgress,
+  MenuItem,
   Stack,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -12,6 +14,10 @@ import { MediaCard } from "../blocks/MediaCard";
 import { MediaCardCompact } from "../blocks/MediaCardCompact";
 import localization from "@/locales/en";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
+import { useMemo, useState } from "react";
+import { SortOption } from "@/types/sort";
+import { sortSavedMedia } from "@/lib/sortMedia";
+import { SORT_OPTIONS } from "@/constants/sortOptions";
 
 interface MediaListProps {
   title: string;
@@ -32,6 +38,12 @@ export const MediaList = ({
   layout,
   onLayoutChange,
 }: MediaListProps) => {
+  const [sortOption, setSortOption] = useState<SortOption>("name-asc");
+  const sortedItems = useMemo(
+    () => sortSavedMedia(items, sortOption),
+    [items, sortOption],
+  );
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -39,25 +51,41 @@ export const MediaList = ({
       <Stack direction="row" sx={{ justifyContent: "space-between" }}>
         <Typography variant="h4">{title}</Typography>
 
-        <ToggleButtonGroup
-          value={layout}
-          exclusive
-          onChange={(_, value) => value && onLayoutChange(value)}
-        >
-          <ToggleButton value="grid">
-            <GridView />
-          </ToggleButton>
-          <ToggleButton value="list">
-            <ViewList />
-          </ToggleButton>
-        </ToggleButtonGroup>
+        <Stack direction="row" spacing={1}>
+          <TextField
+            select
+            label="Sort by"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value as SortOption)}
+            sx={{ minWidth: 220 }}
+          >
+            {SORT_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <ToggleButtonGroup
+            value={layout}
+            exclusive
+            onChange={(_, value) => value && onLayoutChange(value)}
+          >
+            <ToggleButton value="grid">
+              <GridView />
+            </ToggleButton>
+            <ToggleButton value="list">
+              <ViewList />
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
       </Stack>
 
-      {items.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <Typography>{localization.collection.empty}</Typography>
       ) : layout === "grid" ? (
         <Stack spacing={3} direction="row" sx={{ flexWrap: "wrap" }} useFlexGap>
-          {items.map((item) => (
+          {sortedItems.map((item) => (
             <MediaCard
               key={item.id}
               savedItem={item}
@@ -68,7 +96,7 @@ export const MediaList = ({
         </Stack>
       ) : (
         <Stack spacing={1}>
-          {items.map((item) => (
+          {sortedItems.map((item) => (
             <MediaCardCompact
               key={item.id}
               savedItem={item}
