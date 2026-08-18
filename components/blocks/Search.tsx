@@ -10,6 +10,7 @@ import {
   Popper,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import localization from "@/locales/en";
 import { useMovieSearch } from "@/hooks/useSearch";
@@ -42,11 +43,6 @@ export const Search = ({ onAdded }: SearchProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  // async function handleSearch() {
-  //   await search();
-  //   setDropdownOpen(true);
-  // }
-
   function handleShowMore() {
     setDropdownOpen(false);
     router.push(`/search?q=${encodeURIComponent(query)}`);
@@ -57,7 +53,13 @@ export const Search = ({ onAdded }: SearchProps) => {
     .slice(0, PREVIEW_LIMIT);
 
   return (
-    <Box ref={(node) => setAnchorEl(node as HTMLDivElement | null)}>
+    <Stack
+      ref={(node) => setAnchorEl(node as HTMLDivElement | null)}
+      spacing={1}
+      sx={{ width: "80%", alignSelf: "center" }}
+    >
+      <Typography>{localization.searchInstructions}</Typography>
+
       <Stack spacing={2}>
         <TextField
           label={localization.search.label}
@@ -116,6 +118,6 @@ export const Search = ({ onAdded }: SearchProps) => {
           </Paper>
         </ClickAwayListener>
       </Popper>
-    </Box>
+    </Stack>
   );
 };

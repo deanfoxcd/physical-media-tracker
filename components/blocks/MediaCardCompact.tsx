@@ -8,6 +8,7 @@ import { PaddedPaper } from "./PaddedPaper";
 import { SavedItemDialogs } from "./SavedItemDialogs";
 import { useSavedItemDialogs } from "@/hooks/useSavedItemDialogs";
 import { LiveTv, Movie } from "@mui/icons-material";
+import { PriceDisplay } from "./PriceDisplay";
 
 interface MediaCardCompactProps {
   savedItem: SavedMedia & { id: string };
@@ -41,7 +42,8 @@ export const MediaCardCompact = ({
             height={90}
           />
         )}
-        <Stack spacing={1}>
+
+        <Stack spacing={1} sx={{ flexGrow: 1 }}>
           <Link href={imdbLink} onClick={(e) => e.stopPropagation()}>
             {savedItem.media_type === "movie"
               ? savedItem.title
@@ -57,7 +59,16 @@ export const MediaCardCompact = ({
             <Typography>{savedItem.format}</Typography>
           </Stack>
         </Stack>
+
+        {savedItem.status === "owned" ? (
+          <Stack sx={{ justifyContent: "end" }}>
+            <Typography>{savedItem.acquiredFrom}</Typography>
+            <Typography>{savedItem.acquiredDate}</Typography>
+            <PriceDisplay price={savedItem.pricePaid ?? 0} />
+          </Stack>
+        ) : null}
       </Stack>
+
       <SavedItemDialogs
         savedItem={savedItem}
         detailsOpen={dialogs.detailsOpen}

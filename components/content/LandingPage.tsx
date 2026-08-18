@@ -44,7 +44,6 @@ export const LandingPage = () => {
       <Header />
 
       <Stack spacing={1}>
-        <Typography>{localization.searchInstructions}</Typography>
         <Search onAdded={handleAdded} />
       </Stack>
       <PaddedPaper>
