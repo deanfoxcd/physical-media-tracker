@@ -42,7 +42,7 @@ export const LandingPage = () => {
 
   return (
     <Stack spacing={3}>
-      <Header />
+      <Header signOut />
 
       <Stack spacing={1}>
         <Search

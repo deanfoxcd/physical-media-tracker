@@ -24,20 +24,23 @@ export async function addSavedMedia(
   return { ...item, id: docRef.id };
 }
 
-export async function getAllSavedMedia(): Promise<
-  (SavedMedia & { id: string })[]
-> {
-  const snapshot = await getDocs(mediaCollection);
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...(doc.data() as SavedMedia),
-  }));
+export async function getAllSavedMedia(
+  userId: string,
+): Promise<(SavedMedia & { id: string })[]> {
+  const q = query(mediaCollection, where("userId", "==", userId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as SavedMedia) }));
 }
 
 export async function getSavedMediaByStatus(
   status: "owned" | "wishlist",
+  userId: string,
 ): Promise<(SavedMedia & { id: string })[]> {
-  const q = query(mediaCollection, where("status", "==", status));
+  const q = query(
+    mediaCollection,
+    where("userId", "==", userId),
+    where("status", "==", status),
+  );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as SavedMedia) }));
 }

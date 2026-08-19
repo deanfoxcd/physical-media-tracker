@@ -8,6 +8,7 @@ import { TmdbMovie, TmdbTvShow } from "@/types/tmdb";
 import { addSavedMedia } from "@/services/media";
 import { fetchImdbId } from "@/lib/tmdbClient";
 import { DEFAULT_FORM_VALUES } from "@/constants/addToCollectionFormValues";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AddToCollectionFormProps {
   item: TmdbMovie | TmdbTvShow;
@@ -22,6 +23,8 @@ export const AddToCollectionForm = ({
   onClose,
   onSaved,
 }: AddToCollectionFormProps) => {
+  const { user } = useAuth();
+
   async function handleSubmit(values: MediaDetailsFormValues) {
     const { id, ...rest } = item;
     const imdbId = await fetchImdbId(item.media_type, id);
@@ -30,6 +33,7 @@ export const AddToCollectionForm = ({
       ...rest,
       tmdbId: id,
       imdbId,
+      userId: user!.uid,
       status: "owned",
       ...values,
       pricePaid: values.pricePaid === "" ? 0 : values.pricePaid,

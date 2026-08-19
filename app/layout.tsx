@@ -5,6 +5,7 @@ import "./globals.css";
 import { Toaster } from "@/components/blocks/Toaster";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/lib/theme";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +30,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider theme={theme}>
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </AuthProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

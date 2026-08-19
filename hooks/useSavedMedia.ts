@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { getAllSavedMedia, getSavedMediaByStatus } from "@/services/media";
 import type { SavedMedia, SavedMediaUpdates } from "@/types/media";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function useSavedMedia(status?: "owned" | "wishlist") {
+  const { user } = useAuth();
   const [items, setItems] = useState<(SavedMedia & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setItems([]);
+      setLoading(false);
+      return;
+    }
     const fetchItems = status
-      ? getSavedMediaByStatus(status)
-      : getAllSavedMedia();
+      ? getSavedMediaByStatus(status, user.uid)
+      : getAllSavedMedia(user.uid);
     fetchItems.then(setItems).finally(() => setLoading(false));
-  }, [status]);
+  }, [status, user]);
 
   function addItem(item: SavedMedia & { id: string }) {
     setItems((prev) => {

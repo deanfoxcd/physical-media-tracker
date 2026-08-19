@@ -31,6 +31,7 @@ import { FORMAT_OPTIONS } from "@/constants/formatOptions";
 import { MediaDetailsForm, MediaDetailsFormValues } from "./MediaDetailsForm";
 import { POSTER_BASE } from "@/constants/poster";
 import { DEFAULT_FORM_VALUES } from "@/constants/addToCollectionFormValues";
+import { useAuth } from "@/contexts/AuthContext";
 
 type MediaCardProps =
   | {
@@ -61,6 +62,8 @@ export const MediaCard = ({
   existingStatus,
   layout = "grid",
 }: MediaCardProps) => {
+  const { user } = useAuth();
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [moveToCollectionOpen, setMoveToCollectionOpen] = useState(false);
@@ -88,6 +91,7 @@ export const MediaCard = ({
         ...rest,
         tmdbId: id,
         imdbId,
+        userId: user!.uid,
         status: "wishlist",
         format,
       };

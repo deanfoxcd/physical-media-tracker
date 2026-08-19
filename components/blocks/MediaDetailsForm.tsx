@@ -12,7 +12,7 @@ import { FORMAT_OPTIONS } from "@/constants/formatOptions";
 
 export type MediaDetailsFormValues = Omit<
   SavedMediaFields,
-  "tmdbId" | "pricePaid" | "imdbId" | "status"
+  "tmdbId" | "pricePaid" | "imdbId" | "status" | "userId"
 > & {
   pricePaid: number | "";
 };
@@ -30,7 +30,12 @@ export const MediaDetailsForm = ({
   onCancel,
   title,
 }: MediaDetailsFormProps) => {
-  const { register, handleSubmit, control } = useForm<MediaDetailsFormValues>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<MediaDetailsFormValues>({
     defaultValues,
   });
 
@@ -45,7 +50,12 @@ export const MediaDetailsForm = ({
         name="format"
         control={control}
         render={({ field }) => (
-          <TextField label="Format:" select {...field}>
+          <TextField
+            label="Format:"
+            select
+            slotProps={{ select: { MenuProps: { disablePortal: true } } }}
+            {...field}
+          >
             {FORMAT_OPTIONS.map((format) => (
               <MenuItem key={format} value={format}>
                 {format}
@@ -94,7 +104,12 @@ export const MediaDetailsForm = ({
         name="rating"
         control={control}
         render={({ field }) => (
-          <TextField label="Rating out of 10:" select {...field}>
+          <TextField
+            label="Rating out of 10:"
+            select
+            slotProps={{ select: { MenuProps: { disablePortal: true } } }}
+            {...field}
+          >
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
               <MenuItem key={n} value={n}>
                 {n}
@@ -104,7 +119,9 @@ export const MediaDetailsForm = ({
         )}
       />
       <Stack direction="row" spacing={2}>
-        <ActionButton type="submit">Save to Your Collection</ActionButton>
+        <ActionButton type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Saving..." : "Save to Your Collection"}
+        </ActionButton>
         <ActionButton onClick={onCancel} minor>
           Cancel
         </ActionButton>
