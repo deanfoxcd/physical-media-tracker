@@ -9,6 +9,7 @@ import { Header } from "../blocks/Header";
 import { useSavedMedia } from "@/hooks/useSavedMedia";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 import { MediaList } from "../blocks/MediaList";
+import { HelpBanner } from "../blocks/HelpBanner";
 
 type Tabs = "collection" | "wishlist";
 
@@ -51,7 +52,17 @@ export const LandingPage = () => {
       </Stack>
       <PaddedPaper>
         <Stack spacing={3}>
-          <Tabs value={openTab} onChange={handleOnChange}>
+          <Tabs
+            value={openTab}
+            onChange={handleOnChange}
+            variant="fullWidth"
+            sx={{
+              "& .MuiTab-root": {
+                fontSize: "1.2rem",
+                minHeight: 64,
+              },
+            }}
+          >
             <Tab value="collection" label="My Collection" />
             <Tab value="wishlist" label="My Wishlist" />
           </Tabs>
@@ -74,6 +85,7 @@ export const LandingPage = () => {
           </Box>
         </Stack>
       </PaddedPaper>
+      <HelpBanner />
     </Stack>
   );
 };

@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Box,
-  Button,
   ClickAwayListener,
   Paper,
   Popper,
@@ -75,6 +73,7 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
           label={localization.search.label}
           variant="outlined"
           value={query}
+          size="small"
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -84,8 +83,8 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
             if (e.key === "Escape") setDropdownOpen(false);
           }}
         />
-        <Button
-          variant="contained"
+        <ActionButton
+          size="small"
           onClick={() => {
             search();
             setDropdownOpen(true);
@@ -95,7 +94,7 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
           {loading
             ? localization.search.searchLoading
             : localization.search.buttonText}
-        </Button>
+        </ActionButton>
       </Stack>
 
       <Popper

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Chip,
   CircularProgress,
   MenuItem,
   Stack,
@@ -9,7 +10,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { ViewList, GridView } from "@mui/icons-material";
+import { ViewList, GridView, Movie, LiveTv } from "@mui/icons-material";
 import { MediaCard } from "../blocks/MediaCard";
 import { MediaCardCompact } from "../blocks/MediaCardCompact";
 import localization from "@/locales/en";
@@ -30,7 +31,6 @@ interface MediaListProps {
 }
 
 export const MediaList = ({
-  title,
   items,
   loading,
   removeItem,
@@ -39,17 +39,52 @@ export const MediaList = ({
   onLayoutChange,
 }: MediaListProps) => {
   const [sortOption, setSortOption] = useState<SortOption>("name-asc");
-  const sortedItems = useMemo(
-    () => sortSavedMedia(items, sortOption),
-    [items, sortOption],
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<
+    "movie" | "tv" | "all"
+  >("all");
+  const movieCount = items.filter((item) => item.media_type === "movie").length;
+  const tvShowCount = items.filter((item) => item.media_type === "tv").length;
+
+  const filteredItems = useMemo(
+    () =>
+      mediaTypeFilter === "all"
+        ? items
+        : items.filter((item) => item.media_type === mediaTypeFilter),
+    [items, mediaTypeFilter],
   );
+
+  const sortedItems = useMemo(
+    () => sortSavedMedia(filteredItems, sortOption),
+    [filteredItems, sortOption],
+  );
+
+  function toggleFilter(type: "movie" | "tv") {
+    setMediaTypeFilter((prev) => (prev === type ? "all" : type));
+  }
 
   if (loading) return <CircularProgress />;
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" sx={{ justifyContent: "space-between" }}>
-        <Typography variant="h4">{title}</Typography>
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          <Chip
+            icon={<Movie />}
+            label={`${movieCount} movies`}
+            onClick={() => toggleFilter("movie")}
+            color={mediaTypeFilter === "movie" ? "primary" : "default"}
+            variant={mediaTypeFilter === "movie" ? "filled" : "outlined"}
+            sx={{ px: 1, py: 1.5 }}
+          />
+          <Chip
+            icon={<LiveTv />}
+            label={`${tvShowCount} TV shows`}
+            onClick={() => toggleFilter("tv")}
+            color={mediaTypeFilter === "tv" ? "primary" : "default"}
+            variant={mediaTypeFilter === "tv" ? "filled" : "outlined"}
+            sx={{ px: 1, py: 1.5 }}
+          />
+        </Stack>
 
         <Stack direction="row" spacing={1}>
           <TextField

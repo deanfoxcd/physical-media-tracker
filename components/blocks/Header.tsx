@@ -4,7 +4,7 @@ import localization from "@/locales/en";
 export const Header = () => {
   return (
     <Link
-      variant="h1"
+      variant="h2"
       align="center"
       href="/"
       underline="none"
