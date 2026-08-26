@@ -69,6 +69,7 @@ To run this project locally:
 - Improve on styling and design
 - Add Search function for both Collection and Wishlist
 - Session timer
+- Dark Mode
 
 ---
 
