@@ -1,7 +1,18 @@
-import { Box, Link } from "@mui/material";
+"use client";
+
+import { useState } from "react";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Link,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import localization from "@/locales/en";
-import { ActionButton } from "./ActionButton";
 import { useAuth } from "@/contexts/AuthContext";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 interface HeaderProps {
@@ -9,12 +20,20 @@ interface HeaderProps {
 }
 
 export const Header = ({ signOut }: HeaderProps) => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  function handleLogout() {
+    setAnchorEl(null);
+    logout();
+  }
+
   return (
     <Box
       sx={{
         display: "grid",
         gridTemplateColumns: { xs: "1fr auto", sm: "1fr auto 1fr" },
+        alignItems: "center",
       }}
     >
       <Link
@@ -35,31 +54,33 @@ export const Header = ({ signOut }: HeaderProps) => {
           sx={{
             gridColumn: { xs: "2", sm: "3" },
             justifySelf: "end",
-            p: { xs: 0, sm: 1 },
           }}
         >
-          <ActionButton
-            minor
-            onClick={logout}
-            sx={{
-              display: { xs: "none", sm: "inline-flex" },
-              whiteSpace: "nowrap",
-            }}
+          <IconButton
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+            aria-label="Profile"
           >
-            Sign Out
-          </ActionButton>
-          <ActionButton
-            minor
-            onClick={logout}
-            sx={{
-              display: { xs: "inline-flex", sm: "none" },
-              minWidth: 0,
-              p: 1,
-            }}
-            aria-label="Sign Out"
+            <AccountCircleIcon fontSize="large" />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
           >
-            <LogoutIcon fontSize="small" />
-          </ActionButton>
+            <Box sx={{ px: 2, py: 1 }}>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Signed in as
+              </Typography>
+              <Typography variant="body2" sx={{ wordBreak: "break-all" }}>
+                {user?.email}
+              </Typography>
+            </Box>
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+              Sign Out
+            </MenuItem>
+          </Menu>
         </Box>
       )}
     </Box>

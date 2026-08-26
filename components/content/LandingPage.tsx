@@ -50,7 +50,13 @@ export const LandingPage = () => {
           savedItems={[...owned.items, ...wishlist.items]}
         />
       </Stack>
-      <PaddedPaper sx={{ maxWidth: "1200px", alignSelf: "center" }}>
+      <PaddedPaper
+        sx={{
+          width: "100%",
+          maxWidth: layout === "list" ? "1000px" : "1200px",
+          alignSelf: "center",
+        }}
+      >
         <Stack spacing={3}>
           <Tabs
             value={openTab}

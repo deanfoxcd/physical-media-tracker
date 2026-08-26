@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import "./globals.css";
 import { Toaster } from "@/components/blocks/Toaster";
+import { ScrollToTopButton } from "@/components/blocks/ScrollToTopButton";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/lib/theme";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <ThemeProvider theme={theme}>
               {children}
               <Toaster />
+              <ScrollToTopButton />
             </ThemeProvider>
           </AuthProvider>
         </AppRouterCacheProvider>

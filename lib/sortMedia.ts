@@ -1,8 +1,14 @@
 import type { SavedMedia } from "@/types/media";
 import { SortOption } from "@/types/sort";
 
+const LEADING_ARTICLE = /^(the)\s+/i;
+
 function getName(item: SavedMedia) {
   return (item.media_type === "movie" ? item.title : item.name) ?? "";
+}
+
+function getSortName(item: SavedMedia) {
+  return getName(item).replace(LEADING_ARTICLE, "");
 }
 
 function compareStrings(a?: string, b?: string) {
@@ -21,9 +27,13 @@ export function sortSavedMedia<T extends SavedMedia & { id: string }>(
 
   switch (sortOption) {
     case "name-asc":
-      return sorted.sort((a, b) => compareStrings(getName(a), getName(b)));
+      return sorted.sort((a, b) =>
+        compareStrings(getSortName(a), getSortName(b)),
+      );
     case "name-desc":
-      return sorted.sort((a, b) => compareStrings(getName(b), getName(a)));
+      return sorted.sort((a, b) =>
+        compareStrings(getSortName(b), getSortName(a)),
+      );
     case "acquiredDate-asc":
       return sorted.sort((a, b) =>
         compareStrings(a.acquiredDate, b.acquiredDate),

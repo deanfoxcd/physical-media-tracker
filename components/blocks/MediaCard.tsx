@@ -253,62 +253,73 @@ export const MediaCard = ({
 
   return (
     <PaddedPaper>
-      <Stack
-        direction="row"
-        sx={{ justifyContent: "space-between", flexWrap: "wrap" }}
-      >
-        <Stack direction="row" spacing={2}>
-          {media.poster_path && (
-            <Image
-              src={`${POSTER_BASE}${media.poster_path}`}
-              alt={media.media_type === "movie" ? media.title : media.name}
-              width={92}
-              height={138}
-            />
+      <Stack direction="row" spacing={2}>
+        {media.poster_path && (
+          <Image
+            src={`${POSTER_BASE}${media.poster_path}`}
+            alt={media.media_type === "movie" ? media.title : media.name}
+            width={92}
+            height={138}
+          />
+        )}
+        <Stack spacing={1} sx={{ flex: 1, minWidth: 0 }}>
+          <Button
+            onClick={() => console.log(media)}
+            sx={{
+              whiteSpace: "normal",
+              textAlign: "left",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography sx={{ wordBreak: "break-word" }}>
+              {media.media_type === "movie" ? media.title : media.name} (
+              {(media.media_type === "movie"
+                ? media.release_date
+                : media.first_air_date
+              )?.slice(0, 4)}
+              )
+            </Typography>
+          </Button>
+          {existingStatus && (
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              {existingStatus === "owned"
+                ? "Also in your Collection"
+                : "Also in your Wishlist"}
+            </Typography>
           )}
-          <Stack>
-            <Button onClick={() => console.log(media)}>
-              <Typography>
-                {media.media_type === "movie" ? media.title : media.name} (
-                {(media.media_type === "movie"
-                  ? media.release_date
-                  : media.first_air_date
-                )?.slice(0, 4)}
-                )
-              </Typography>
-            </Button>
-            {existingStatus && (
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                {existingStatus === "owned"
-                  ? "Also in your Collection"
-                  : "Also in your Wishlist"}
-              </Typography>
-            )}
-          </Stack>
-        </Stack>
 
-        <Stack direction="row" spacing={12}>
-          <Stack sx={{ justifyContent: "center" }}>
-            {media === savedItem ? (
-              <Typography>{media.format}</Typography>
-            ) : null}
-            {media.media_type === "movie" ? <Movie /> : <LiveTv />}
-          </Stack>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              {media === savedItem ? (
+                <Typography>{media.format}</Typography>
+              ) : null}
+              {media.media_type === "movie" ? <Movie /> : <LiveTv />}
+            </Stack>
 
-          <Stack spacing={1} sx={{ justifyContent: "center" }}>
             {item && (
               <>
-                {addToCollectionButton}
-                <ActionButton
-                  onClick={() => setWishlistDialogOpen(true)}
-                  disabled={addingToWishlist || addedToWishlist}
-                >
-                  {addedToWishlist
-                    ? localization.mediaCard.added
-                    : addingToWishlist
-                      ? localization.mediaCard.adding
-                      : localization.mediaCard.addToWishlist}
-                </ActionButton>
+                <Stack direction="row" spacing={1}>
+                  <ActionButton
+                    onClick={() => setWishlistDialogOpen(true)}
+                    disabled={addingToWishlist || addedToWishlist}
+                  >
+                    {addedToWishlist
+                      ? localization.mediaCard.added
+                      : addingToWishlist
+                        ? localization.mediaCard.adding
+                        : localization.mediaCard.addToWishlist}
+                  </ActionButton>
+                  {addToCollectionButton}
+                </Stack>
+
                 <Dialog
                   open={wishlistDialogOpen}
                   onClose={() => setWishlistDialogOpen(false)}
