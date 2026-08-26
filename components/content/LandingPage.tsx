@@ -41,7 +41,7 @@ export const LandingPage = () => {
   }
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={{ px: { xs: 2, sm: 3, md: 0 } }}>
       <Header signOut />
 
       <Stack spacing={1}>
@@ -50,7 +50,7 @@ export const LandingPage = () => {
           savedItems={[...owned.items, ...wishlist.items]}
         />
       </Stack>
-      <PaddedPaper>
+      <PaddedPaper sx={{ maxWidth: "1200px", alignSelf: "center" }}>
         <Stack spacing={3}>
           <Tabs
             value={openTab}
@@ -58,8 +58,7 @@ export const LandingPage = () => {
             variant="fullWidth"
             sx={{
               "& .MuiTab-root": {
-                fontSize: "1.2rem",
-                minHeight: 64,
+                fontSize: { xs: "0.8rem", sm: "1.2rem" },
               },
             }}
           >

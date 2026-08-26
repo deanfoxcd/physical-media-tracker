@@ -7,10 +7,7 @@ interface PaddedPaperProps {
 
 export const PaddedPaper = ({ children, sx }: PaddedPaperProps) => {
   return (
-    <Paper
-      square={false}
-      sx={[{ padding: "15px" }, ...(Array.isArray(sx) ? sx : [sx])]}
-    >
+    <Paper square={false} sx={[{ p: 2 }, ...(Array.isArray(sx) ? sx : [sx])]}>
       {children}
     </Paper>
   );

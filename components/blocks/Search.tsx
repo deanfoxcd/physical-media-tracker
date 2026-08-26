@@ -16,9 +16,7 @@ import { ActionButton } from "./ActionButton";
 import { MediaCard } from "./MediaCard";
 import { SavedMedia } from "@/types/media";
 import { TmdbMultiResult } from "@/types/tmdb";
-
-const PREVIEW_LIMIT = 7;
-const DEBOUNCE_MS = 500;
+import { DEBOUNCE_MS, PREVIEW_LIMIT } from "@/constants/search";
 
 interface SearchProps {
   onAdded?: (item: SavedMedia & { id: string }) => void;
@@ -64,7 +62,7 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
     <Stack
       ref={(node) => setAnchorEl(node as HTMLDivElement | null)}
       spacing={1}
-      sx={{ width: "80%", alignSelf: "center" }}
+      sx={{ width: "100%", maxWidth: "700px", alignSelf: "center" }}
     >
       <Typography>{localization.searchInstructions}</Typography>
 

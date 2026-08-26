@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Alert, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Link, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ActionButton } from "../blocks/ActionButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 import Head from "next/head";
 import { Header } from "../blocks/Header";
+import { PaddedPaper } from "../blocks/PaddedPaper";
 
 interface LoginFormValues {
   email: string;
@@ -27,6 +28,8 @@ function getAuthErrorMessage(error: unknown): string {
       case "auth/wrong-password":
       case "auth/user-not-found":
         return "Invalid email or password.";
+      case "auth/missing-email":
+        return "Please enter your email address first.";
       default:
         return "Something went wrong. Please try again.";
     }
@@ -35,20 +38,39 @@ function getAuthErrorMessage(error: unknown): string {
 }
 
 export const LoginPage = () => {
-  const { login, signUp } = useAuth();
+  const { login, signUp, resetPassword } = useAuth();
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<LoginFormValues>({
     defaultValues: { email: "", password: "" },
   });
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   async function onLogin(values: LoginFormValues) {
     setError(null);
+    setMessage(null);
     try {
       await login(values.email, values.password);
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
+    }
+  }
+
+  async function onForgotPassword() {
+    setError(null);
+    setMessage(null);
+    const email = getValues("email");
+    if (!email) {
+      setError("Please enter your email address first.");
+      return;
+    }
+    try {
+      await resetPassword(email);
+      setMessage("Password reset email sent. Check your inbox.");
     } catch (err) {
       setError(getAuthErrorMessage(err));
     }
@@ -74,32 +96,52 @@ export const LoginPage = () => {
       <Header />
       <Stack
         component="form"
-        spacing={3}
+        spacing={5}
         onSubmit={handleSubmit(onLogin)}
         sx={{ alignItems: "center", pt: 10 }}
       >
-        <Typography variant="h3">Login or Sign Up</Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-        <Stack spacing={2}>
-          <TextField
-            label="Email"
-            type="email"
-            required
-            {...register("email")}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            required
-            {...register("password")}
-          />
-          <Stack direction="row" spacing={2}>
-            <ActionButton type="submit">Login</ActionButton>
-            <ActionButton type="button" minor onClick={handleSubmit(onSignUp)}>
-              Sign Up
-            </ActionButton>
+        <PaddedPaper>
+          <Stack spacing={5}>
+            <Typography variant="h3">Login or Sign Up</Typography>
+            {error && <Alert severity="error">{error}</Alert>}
+            {message && <Alert severity="success">{message}</Alert>}
+            <Stack spacing={3}>
+              <Stack spacing={2}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  required
+                  {...register("email")}
+                />
+                <TextField
+                  label="Password"
+                  type="password"
+                  required
+                  {...register("password")}
+                />
+                <Link
+                  component="button"
+                  type="button"
+                  sx={{ alignSelf: "end" }}
+                  onClick={onForgotPassword}
+                >
+                  Forgot password?
+                </Link>
+              </Stack>
+
+              <Stack direction="row" sx={{ justifyContent: "space-between" }}>
+                <ActionButton type="submit">Login</ActionButton>
+                <ActionButton
+                  type="button"
+                  minor
+                  onClick={handleSubmit(onSignUp)}
+                >
+                  Sign Up
+                </ActionButton>
+              </Stack>
+            </Stack>
           </Stack>
-        </Stack>
+        </PaddedPaper>
       </Stack>
     </>
   );

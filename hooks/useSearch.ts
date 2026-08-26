@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { TmdbMultiResult } from "@/types/tmdb";
+import { showToast } from "@/lib/toast";
 
 export function useMovieSearch() {
   const [query, setQuery] = useState("");
@@ -21,6 +22,7 @@ export function useMovieSearch() {
         `/api/tmdb/search?q=${encodeURIComponent(q)}&page=${nextPage}`,
       );
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Search failed");
       setResults((prev) => {
         const filtered = data.results.filter(
           (r: TmdbMultiResult) =>
@@ -30,6 +32,8 @@ export function useMovieSearch() {
       });
       setPage(data.page);
       setTotalPages(data.total_pages);
+    } catch {
+      showToast("Search failed. Please try again.", "error");
     } finally {
       setLoading(false);
     }

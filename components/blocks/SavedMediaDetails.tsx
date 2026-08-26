@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { SavedMedia } from "@/types/media";
-import { Dialog, DialogContent, Stack, Typography } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import localization from "../../locales/en";
 import { ActionButton } from "./ActionButton";
 import {
@@ -22,6 +29,9 @@ export const SavedMediaDetails = ({
   onClose,
   onUpdated,
 }: SavedMediaDetailsProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [editing, setEditing] = useState(false);
 
   async function handleSubmit(values: MediaDetailsFormValues) {
@@ -69,7 +79,11 @@ export const SavedMediaDetails = ({
                   ? savedItem.title
                   : savedItem.name}
               </Typography>
-              <ActionButton minor onClick={onClose}>
+              <ActionButton
+                minor
+                onClick={onClose}
+                size={isMobile ? "small" : "medium"}
+              >
                 X
               </ActionButton>
             </Stack>
@@ -129,10 +143,13 @@ export const SavedMediaDetails = ({
                 minor
                 onClick={() => setEditing(true)}
                 sx={{ textBox: "trim-both cap alphabetic" }}
+                size={isMobile ? "small" : "medium"}
               >
                 Edit
               </ActionButton>
-              <ActionButton minor>Remove from Collection</ActionButton>
+              <ActionButton minor size={isMobile ? "small" : "medium"}>
+                Remove from Collection
+              </ActionButton>
             </Stack>
           </Stack>
         )}

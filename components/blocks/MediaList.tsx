@@ -9,6 +9,8 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { ViewList, GridView, Movie, LiveTv } from "@mui/icons-material";
 import { MediaCard } from "../blocks/MediaCard";
@@ -38,6 +40,10 @@ export const MediaList = ({
   layout,
   onLayoutChange,
 }: MediaListProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const toggleButtonSize = isMobile ? 40 : 56;
+
   const [sortOption, setSortOption] = useState<SortOption>("name-asc");
   const [mediaTypeFilter, setMediaTypeFilter] = useState<
     "movie" | "tv" | "all"
@@ -66,7 +72,11 @@ export const MediaList = ({
 
   return (
     <Stack spacing={2}>
-      <Stack direction="row" sx={{ justifyContent: "space-between" }}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+        sx={{ justifyContent: "space-between" }}
+      >
         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <Chip
             icon={<Movie />}
@@ -86,13 +96,18 @@ export const MediaList = ({
           />
         </Stack>
 
-        <Stack direction="row" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={[isMobile && { justifyContent: "space-between" }]}
+        >
           <TextField
             select
             label="Sort by"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOption)}
             sx={{ minWidth: 220 }}
+            size={isMobile ? "small" : "medium"}
           >
             {SORT_OPTIONS.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -100,16 +115,21 @@ export const MediaList = ({
               </MenuItem>
             ))}
           </TextField>
-
           <ToggleButtonGroup
             value={layout}
             exclusive
             onChange={(_, value) => value && onLayoutChange(value)}
           >
-            <ToggleButton value="grid">
+            <ToggleButton
+              value="grid"
+              sx={{ width: toggleButtonSize, height: toggleButtonSize }}
+            >
               <GridView />
             </ToggleButton>
-            <ToggleButton value="list">
+            <ToggleButton
+              value="list"
+              sx={{ width: toggleButtonSize, height: toggleButtonSize }}
+            >
               <ViewList />
             </ToggleButton>
           </ToggleButtonGroup>
@@ -119,7 +139,12 @@ export const MediaList = ({
       {sortedItems.length === 0 ? (
         <Typography>{localization.collection.empty}</Typography>
       ) : layout === "grid" ? (
-        <Stack spacing={3} direction="row" sx={{ flexWrap: "wrap" }} useFlexGap>
+        <Stack
+          spacing={3}
+          direction="row"
+          sx={{ flexWrap: "wrap", justifyContent: "center" }}
+          useFlexGap
+        >
           {sortedItems.map((item) => (
             <MediaCard
               key={item.id}

@@ -18,7 +18,10 @@ export function useSavedMedia(status?: "owned" | "wishlist") {
     const fetchItems = status
       ? getSavedMediaByStatus(status, user.uid)
       : getAllSavedMedia(user.uid);
-    fetchItems.then(setItems).finally(() => setLoading(false));
+    fetchItems
+      .then(setItems)
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [status, user]);
 
   function addItem(item: SavedMedia & { id: string }) {

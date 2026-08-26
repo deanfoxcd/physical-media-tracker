@@ -39,7 +39,11 @@ export const SavedItemDialogs = ({
     >
       <DialogContent>
         <MediaDetailsForm
-          defaultValues={{ ...DEFAULT_FORM_VALUES, format: savedItem.format }}
+          defaultValues={{
+            ...DEFAULT_FORM_VALUES,
+            format: savedItem.format,
+            notes: savedItem.notes ?? "",
+          }}
           onSubmit={onMoveToCollectionSubmit}
           onCancel={onMoveToCollectionClose}
         />

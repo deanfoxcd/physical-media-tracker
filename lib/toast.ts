@@ -1,4 +1,11 @@
-type ToastListener = (message: string) => void;
+export type ToastSeverity = "success" | "error";
+
+export interface ToastPayload {
+  message: string;
+  severity: ToastSeverity;
+}
+
+type ToastListener = (payload: ToastPayload) => void;
 
 let listener: ToastListener | null = null;
 
@@ -9,6 +16,6 @@ export function subscribeToast(fn: ToastListener) {
   };
 }
 
-export function showToast(message: string) {
-  listener?.(message);
+export function showToast(message: string, severity: ToastSeverity = "success") {
+  listener?.({ message, severity });
 }

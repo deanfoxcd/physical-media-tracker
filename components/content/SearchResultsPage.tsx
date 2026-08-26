@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, Stack, TextField } from "@mui/material";
 import { MediaCard } from "../blocks/MediaCard";
 import localization from "@/locales/en";
 import { useMovieSearch } from "@/hooks/useSearch";
 import { ActionButton } from "../blocks/ActionButton";
 import { Header } from "../blocks/Header";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginPage } from "./LoginPage";
 
 interface SearchResultsPageProps {
   initialQuery: string;
 }
 
 export const SearchResultsPage = ({ initialQuery }: SearchResultsPageProps) => {
+  const { user, loading: authLoading } = useAuth();
   const { query, setQuery, results, loading, hasMore, search, loadMore } =
     useMovieSearch();
 
@@ -23,6 +26,18 @@ export const SearchResultsPage = ({ initialQuery }: SearchResultsPageProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
+
+  if (authLoading) {
+    return (
+      <Stack sx={{ alignItems: "center", mt: 10 }}>
+        <CircularProgress />
+      </Stack>
+    );
+  }
+
+  if (!user) {
+    return <LoginPage />;
+  }
 
   return (
     <>

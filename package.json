@@ -1,6 +1,12 @@
 {
   "name": "physical-media-collection-tracker",
   "version": "0.1.0",
+  "description": "Track your physical movie and TV show collection and wishlist.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deanfoxcd/physical-media-tracker.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

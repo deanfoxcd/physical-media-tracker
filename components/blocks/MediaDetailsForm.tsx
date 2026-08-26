@@ -4,6 +4,8 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { SavedMediaFields } from "@/types/media";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +32,9 @@ export const MediaDetailsForm = ({
   onCancel,
   title,
 }: MediaDetailsFormProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const {
     register,
     handleSubmit,
@@ -52,6 +57,7 @@ export const MediaDetailsForm = ({
         render={({ field }) => (
           <TextField
             label="Format:"
+            size={isMobile ? "small" : "medium"}
             select
             slotProps={{ select: { MenuProps: { disablePortal: true } } }}
             {...field}
@@ -64,13 +70,22 @@ export const MediaDetailsForm = ({
           </TextField>
         )}
       />
-      <TextField label="Condition:" {...register("condition")} />
-      <TextField label="Acquired from:" {...register("acquiredFrom")} />
+      <TextField
+        label="Condition:"
+        {...register("condition")}
+        size={isMobile ? "small" : "medium"}
+      />
+      <TextField
+        label="Acquired from:"
+        {...register("acquiredFrom")}
+        size={isMobile ? "small" : "medium"}
+      />
       <TextField
         label="Acquired date:"
         type="date"
         slotProps={{ inputLabel: { shrink: true } }}
         {...register("acquiredDate")}
+        size={isMobile ? "small" : "medium"}
       />
       <TextField
         label="Price Paid:"
@@ -97,15 +112,27 @@ export const MediaDetailsForm = ({
           e.target.value = e.target.value.replace(/(\.\d{2})\d+$/, "$1");
           priceField.onChange(e);
         }}
+        size={isMobile ? "small" : "medium"}
       />
-      <TextField label="Notes:" multiline {...register("notes")} />
-      <TextField label="Review:" multiline {...register("review")} />
+      <TextField
+        label="Notes:"
+        multiline
+        {...register("notes")}
+        size={isMobile ? "small" : "medium"}
+      />
+      <TextField
+        label="Review:"
+        multiline
+        {...register("review")}
+        size={isMobile ? "small" : "medium"}
+      />
       <Controller
         name="rating"
         control={control}
         render={({ field }) => (
           <TextField
             label="Rating out of 10:"
+            size={isMobile ? "small" : "medium"}
             select
             slotProps={{ select: { MenuProps: { disablePortal: true } } }}
             {...field}
@@ -119,10 +146,18 @@ export const MediaDetailsForm = ({
         )}
       />
       <Stack direction="row" spacing={2}>
-        <ActionButton type="submit" disabled={isSubmitting}>
+        <ActionButton
+          type="submit"
+          disabled={isSubmitting}
+          size={isMobile ? "small" : "medium"}
+        >
           {isSubmitting ? "Saving..." : "Save to Your Collection"}
         </ActionButton>
-        <ActionButton onClick={onCancel} minor>
+        <ActionButton
+          onClick={onCancel}
+          minor
+          size={isMobile ? "small" : "medium"}
+        >
           Cancel
         </ActionButton>
       </Stack>

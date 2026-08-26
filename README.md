@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 Physical Media Collection Tracker
 
-## Getting Started
+[![Status](https://img.shields.io/badge/Status-In%20Progress-orange?style=flat-square)](https://github.com/deanfoxcd/physical-media-tracker)
 
-First, run the development server:
+A web app for tracking a physical movie and TV show collection – DVDs, Blu-Rays, 4Ks, and more. Search for titles via TMDB, add them to your collection or wishlist, and keep notes, ratings, and purchase details all in one place.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Live Demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+👉 Coming soon
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✨ Features
 
-To learn more about Next.js, take a look at the following resources:
+- Search for movies and TV shows powered by TMDB
+- Track owned media with format, condition, price paid, acquisition details, notes, review, and rating
+- Maintain a separate wishlist, with notes that carry over when an item is moved to your collection
+- Sort and filter your collection/wishlist by title, media type, and more
+- Switch between grid and list views, responsive down to mobile
+- Email/password authentication with password reset, backed by Firebase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Getting Started
 
-## Deploy on Vercel
+To run this project locally:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/deanfoxcd/physical-media-tracker.git
+   cd physical-media-tracker
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+3. **Set up environment variables**
+   - Copy `.env.example` to `.env.local` and fill in your Firebase project config and TMDB API key.
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+5. Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧰 Tech Stack
+
+- **Frontend:** Next.js (React with TypeScript, App Router and API routes), MUI
+- **Backend:** Firebase (Authentication, Firestore)
+- **External API:** TMDB (The Movie Database)
+- **Deployment:** Vercel (coming soon)
+
+---
+
+## ⚠️ Known Issues
+
+- The in-memory rate limiter on the TMDB proxy routes resets per server instance, so it isn't a hard global limit on serverless deployments
+
+---
+
+## ✅ To Do
+
+- Deploy to Vercel and connect a live demo link
+- Add automated tests
+- Continue polishing mobile responsiveness across remaining pages
+- Improve on styling and design
+- Add Search function for both Collection and Wishlist
+
+---
+
+## 📬 Contact
+
+Created by [Dean Fox](https://github.com/deanfoxcd) – feel free to reach out!
+
+---

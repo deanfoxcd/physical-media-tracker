@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
-import { subscribeToast } from "@/lib/toast";
+import { subscribeToast, type ToastPayload } from "@/lib/toast";
 
 export function Toaster() {
-  const [message, setMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastPayload | null>(null);
 
-  useEffect(() => subscribeToast(setMessage), []);
+  useEffect(() => subscribeToast(setToast), []);
 
   return (
     <Snackbar
-      open={message !== null}
+      open={toast !== null}
       autoHideDuration={3000}
-      onClose={() => setMessage(null)}
+      onClose={() => setToast(null)}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     >
-      <Alert severity="success" onClose={() => setMessage(null)}>
-        {message}
+      <Alert severity={toast?.severity ?? "success"} onClose={() => setToast(null)}>
+        {toast?.message}
       </Alert>
     </Snackbar>
   );
