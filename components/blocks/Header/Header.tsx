@@ -14,6 +14,15 @@ import localization from "@/locales/en";
 import { useAuth } from "@/contexts/AuthContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
+import {
+  dialogBoxSX,
+  emailTextSX,
+  logoutIconSX,
+  mainBoxSX,
+  pageTitleSX,
+  profileIconBoxSX,
+  signedInTextSX,
+} from "./styles";
 
 interface HeaderProps {
   signOut?: boolean;
@@ -29,33 +38,12 @@ export const Header = ({ signOut }: HeaderProps) => {
   }
 
   return (
-    <Box
-      sx={{
-        display: "grid",
-        gridTemplateColumns: { xs: "1fr auto", sm: "1fr auto 1fr" },
-        alignItems: "center",
-      }}
-    >
-      <Link
-        variant="h2"
-        href="/"
-        underline="none"
-        sx={{
-          color: "black",
-          fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3.75rem" },
-          gridColumn: { xs: "1", sm: "2" },
-          justifySelf: { xs: "start", sm: "center" },
-        }}
-      >
+    <Box sx={mainBoxSX}>
+      <Link variant="h2" href="/" underline="none" sx={pageTitleSX}>
         {localization.pageTitle}
       </Link>
       {signOut && (
-        <Box
-          sx={{
-            gridColumn: { xs: "2", sm: "3" },
-            justifySelf: "end",
-          }}
-        >
+        <Box sx={profileIconBoxSX}>
           <IconButton
             onClick={(e) => setAnchorEl(e.currentTarget)}
             aria-label="Profile"
@@ -67,17 +55,17 @@ export const Header = ({ signOut }: HeaderProps) => {
             open={Boolean(anchorEl)}
             onClose={() => setAnchorEl(null)}
           >
-            <Box sx={{ px: 2, py: 1 }}>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Box sx={dialogBoxSX}>
+              <Typography variant="body2" sx={signedInTextSX}>
                 Signed in as
               </Typography>
-              <Typography variant="body2" sx={{ wordBreak: "break-all" }}>
+              <Typography variant="body2" sx={emailTextSX}>
                 {user?.email}
               </Typography>
             </Box>
             <Divider />
             <MenuItem onClick={handleLogout}>
-              <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+              <LogoutIcon fontSize="small" sx={logoutIconSX} />
               Sign Out
             </MenuItem>
           </Menu>

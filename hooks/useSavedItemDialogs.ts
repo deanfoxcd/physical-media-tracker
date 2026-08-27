@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 import { updateSavedMedia } from "@/services/media";
-import { MediaDetailsFormValues } from "@/components/blocks/MediaDetailsForm";
+import { MediaDetailsFormValues } from "@/components/blocks/MediaDetailsForm/MediaDetailsForm";
 
 export function useSavedItemDialogs(
   savedItem: SavedMedia & { id: string },

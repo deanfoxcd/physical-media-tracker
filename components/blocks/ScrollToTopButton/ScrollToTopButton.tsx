@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { Fab, Zoom } from "@mui/material";
 import { KeyboardArrowUp } from "@mui/icons-material";
-
-const SHOW_AFTER_PX = 300;
+import { fabSX } from "./styles";
+import { SHOW_AFTER_PX } from "@/constants/scrollToTopButton";
 
 export function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
@@ -28,7 +28,7 @@ export function ScrollToTopButton() {
         size="medium"
         onClick={scrollToTop}
         aria-label="Scroll to top"
-        sx={{ position: "fixed", bottom: 24, right: 24 }}
+        sx={fabSX}
       >
         <KeyboardArrowUp />
       </Fab>

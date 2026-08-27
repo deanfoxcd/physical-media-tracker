@@ -28,6 +28,19 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const INACTIVITY_LIMIT_MS = 60 * 60 * 1000;
+const LAST_ACTIVITY_KEY = "lastActivityAt";
+const ACTIVITY_EVENTS = [
+  "mousedown",
+  "keydown",
+  "scroll",
+  "touchstart",
+] as const;
+
+function recordActivity() {
+  localStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now()));
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +51,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const lastActivity = Number(localStorage.getItem(LAST_ACTIVITY_KEY));
+    if (lastActivity && Date.now() - lastActivity > INACTIVITY_LIMIT_MS) {
+      signOut(auth);
+      return;
+    }
+
+    recordActivity();
+    ACTIVITY_EVENTS.forEach((event) =>
+      window.addEventListener(event, recordActivity),
+    );
+
+    const interval = setInterval(() => {
+      const lastActivity = Number(localStorage.getItem(LAST_ACTIVITY_KEY));
+      if (lastActivity && Date.now() - lastActivity > INACTIVITY_LIMIT_MS) {
+        signOut(auth);
+      }
+    }, 60 * 1000);
+
+    return () => {
+      ACTIVITY_EVENTS.forEach((event) =>
+        window.removeEventListener(event, recordActivity),
+      );
+      clearInterval(interval);
+    };
+  }, [user]);
 
   async function login(email: string, password: string) {
     await signInWithEmailAndPassword(auth, email, password);

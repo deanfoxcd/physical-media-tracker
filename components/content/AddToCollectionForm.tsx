@@ -2,7 +2,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import {
   MediaDetailsForm,
   type MediaDetailsFormValues,
-} from "./MediaDetailsForm";
+} from "../blocks/MediaDetailsForm/MediaDetailsForm";
 import { SavedMedia } from "@/types/media";
 import { TmdbMovie, TmdbTvShow } from "@/types/tmdb";
 import { addSavedMedia } from "@/services/media";
@@ -50,6 +50,7 @@ export const AddToCollectionForm = ({
           defaultValues={DEFAULT_FORM_VALUES}
           onSubmit={handleSubmit}
           onCancel={onClose}
+          title={item.media_type === "movie" ? item.title : item.name}
         />
       </DialogContent>
     </Dialog>

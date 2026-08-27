@@ -9,8 +9,10 @@ import {
 } from "@mui/material";
 import { SavedMediaFields } from "@/types/media";
 import { Controller, useForm } from "react-hook-form";
-import { ActionButton } from "./ActionButton";
+import { useState } from "react";
+import { ActionButton } from "../ActionButton";
 import { FORMAT_OPTIONS } from "@/constants/formatOptions";
+import { buttonStackSX, headerStackSX, priceSX } from "./styles";
 
 export type MediaDetailsFormValues = Omit<
   SavedMediaFields,
@@ -24,6 +26,8 @@ interface MediaDetailsFormProps {
   onSubmit: (values: MediaDetailsFormValues) => Promise<void> | void;
   onCancel: () => void;
   title?: string;
+  onDelete?: () => Promise<void> | void;
+  deleteLabel?: string;
 }
 
 export const MediaDetailsForm = ({
@@ -31,9 +35,13 @@ export const MediaDetailsForm = ({
   onSubmit,
   onCancel,
   title,
+  onDelete,
+  deleteLabel = "Remove",
 }: MediaDetailsFormProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [deleting, setDeleting] = useState(false);
 
   const {
     register,
@@ -48,9 +56,30 @@ export const MediaDetailsForm = ({
     setValueAs: (v) => (v === "" ? "" : Math.round(Number(v) * 100) / 100),
   });
 
+  async function handleDelete() {
+    if (!onDelete) return;
+    setDeleting(true);
+    try {
+      await onDelete();
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   return (
     <Stack component="form" onSubmit={handleSubmit(onSubmit)} spacing={2}>
-      {title ? <Typography variant="h6">{title}</Typography> : null}
+      {title ? (
+        <Stack direction="row" sx={headerStackSX}>
+          <Typography variant="h6">{title}</Typography>
+          <ActionButton
+            minor
+            onClick={onCancel}
+            size={isMobile ? "small" : "medium"}
+          >
+            X
+          </ActionButton>
+        </Stack>
+      ) : null}
       <Controller
         name="format"
         control={control}
@@ -90,17 +119,7 @@ export const MediaDetailsForm = ({
       <TextField
         label="Price Paid:"
         type="number"
-        sx={{
-          "& input[type=number]": { MozAppearance: "textfield" },
-          "& input[type=number]::-webkit-outer-spin-button": {
-            WebkitAppearance: "none",
-            margin: 0,
-          },
-          "& input[type=number]::-webkit-inner-spin-button": {
-            WebkitAppearance: "none",
-            margin: 0,
-          },
-        }}
+        sx={priceSX}
         slotProps={{
           input: {
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -145,20 +164,23 @@ export const MediaDetailsForm = ({
           </TextField>
         )}
       />
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={2} sx={buttonStackSX}>
+        {onDelete && (
+          <ActionButton
+            onClick={handleDelete}
+            disabled={deleting}
+            minor
+            size={isMobile ? "small" : "medium"}
+          >
+            {deleting ? "Removing..." : deleteLabel}
+          </ActionButton>
+        )}
         <ActionButton
           type="submit"
           disabled={isSubmitting}
           size={isMobile ? "small" : "medium"}
         >
           {isSubmitting ? "Saving..." : "Save to Your Collection"}
-        </ActionButton>
-        <ActionButton
-          onClick={onCancel}
-          minor
-          size={isMobile ? "small" : "medium"}
-        >
-          Cancel
         </ActionButton>
       </Stack>
     </Stack>

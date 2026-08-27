@@ -2,13 +2,14 @@
 
 import { useEffect } from "react";
 import { Box, Button, CircularProgress, Stack, TextField } from "@mui/material";
-import { MediaCard } from "../blocks/MediaCard";
+import { SearchResultCard } from "../SearchResultCard/SearchResultCard";
 import localization from "@/locales/en";
 import { useMovieSearch } from "@/hooks/useSearch";
-import { ActionButton } from "../blocks/ActionButton";
-import { Header } from "../blocks/Header";
+import { ActionButton } from "../../blocks/ActionButton";
+import { Header } from "../../blocks/Header/Header";
 import { useAuth } from "@/contexts/AuthContext";
-import { LoginPage } from "./LoginPage";
+import { LoginPage } from "../LoginPage/LoginPage";
+import { loadingStackSX } from "./styles";
 
 interface SearchResultsPageProps {
   initialQuery: string;
@@ -29,7 +30,7 @@ export const SearchResultsPage = ({ initialQuery }: SearchResultsPageProps) => {
 
   if (authLoading) {
     return (
-      <Stack sx={{ alignItems: "center", mt: 10 }}>
+      <Stack sx={loadingStackSX}>
         <CircularProgress />
       </Stack>
     );
@@ -58,7 +59,7 @@ export const SearchResultsPage = ({ initialQuery }: SearchResultsPageProps) => {
 
         {results.map((item) => (
           <Box key={item.id}>
-            <MediaCard item={item} />
+            <SearchResultCard item={item} />
           </Box>
         ))}
 

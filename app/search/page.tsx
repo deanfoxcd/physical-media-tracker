@@ -1,4 +1,4 @@
-import { SearchResultsPage } from "@/components/content/SearchResultsPage";
+import { SearchResultsPage } from "@/components/content/SearchResultsPage/SearchResultsPage";
 
 export default async function SearchPage({
   searchParams,

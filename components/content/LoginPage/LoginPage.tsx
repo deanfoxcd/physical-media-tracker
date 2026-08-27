@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Alert, Link, Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { ActionButton } from "../blocks/ActionButton";
+import { ActionButton } from "../../blocks/ActionButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
-import Head from "next/head";
-import { Header } from "../blocks/Header";
-import { PaddedPaper } from "../blocks/PaddedPaper";
+import { Header } from "../../blocks/Header/Header";
+import { PaddedPaper } from "../../blocks/PaddedPaper";
+import { buttonStackSX, forgotPasswordLinkSX, mainStackSX } from "./styles";
 
 interface LoginFormValues {
   email: string;
@@ -92,13 +92,13 @@ export const LoginPage = () => {
   }
 
   return (
-    <>
+    <Stack>
       <Header />
       <Stack
         component="form"
         spacing={5}
         onSubmit={handleSubmit(onLogin)}
-        sx={{ alignItems: "center", pt: 10 }}
+        sx={mainStackSX}
       >
         <PaddedPaper>
           <Stack spacing={5}>
@@ -122,15 +122,14 @@ export const LoginPage = () => {
                 <Link
                   component="button"
                   type="button"
-                  sx={{ alignSelf: "end" }}
+                  sx={forgotPasswordLinkSX}
                   onClick={onForgotPassword}
                 >
                   Forgot password?
                 </Link>
               </Stack>
 
-              <Stack direction="row" sx={{ justifyContent: "space-between" }}>
-                <ActionButton type="submit">Login</ActionButton>
+              <Stack direction="row" sx={buttonStackSX}>
                 <ActionButton
                   type="button"
                   minor
@@ -138,11 +137,12 @@ export const LoginPage = () => {
                 >
                   Sign Up
                 </ActionButton>
+                <ActionButton type="submit">Login</ActionButton>
               </Stack>
             </Stack>
           </Stack>
         </PaddedPaper>
       </Stack>
-    </>
+    </Stack>
   );
 };

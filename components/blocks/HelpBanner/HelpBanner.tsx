@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { Paper, Stack, Typography, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
-
-const DISMISSED_KEY = "helpBannerDismissed";
+import { mainStackSX, paperSX } from "./styles";
+import { DISMISSED_KEY } from "@/constants/helpBanner";
 
 export const HelpBanner = () => {
   const [visible, setVisible] = useState(false);
@@ -22,19 +22,8 @@ export const HelpBanner = () => {
   if (!visible) return null;
 
   return (
-    <Paper
-      elevation={4}
-      sx={{
-        position: "fixed",
-        bottom: 16,
-        left: "50%",
-        transform: "translateX(-50%)",
-        p: 2,
-        zIndex: (theme) => theme.zIndex.appBar,
-        maxWidth: 500,
-      }}
-    >
-      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+    <Paper elevation={4} sx={paperSX}>
+      <Stack direction="row" spacing={2} sx={mainStackSX}>
         <Typography variant="body2">
           Click on the poster for more details and to edit details. Click on the
           title to see the IMDb page.

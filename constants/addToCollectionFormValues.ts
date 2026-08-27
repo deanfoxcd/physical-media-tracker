@@ -1,4 +1,4 @@
-import { MediaDetailsFormValues } from "@/components/blocks/MediaDetailsForm";
+import { MediaDetailsFormValues } from "@/components/blocks/MediaDetailsForm/MediaDetailsForm";
 
 export const DEFAULT_FORM_VALUES: MediaDetailsFormValues = {
   format: "DVD",

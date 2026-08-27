@@ -1,15 +1,22 @@
 "use client";
 
 import { Box, Stack, Tab, Tabs } from "@mui/material";
-import { Search } from "../blocks/Search";
+import { Search } from "../Search/Search";
 import localization from "@/locales/en";
-import { PaddedPaper } from "../blocks/PaddedPaper";
+import { PaddedPaper } from "../../blocks/PaddedPaper";
 import React, { useState } from "react";
-import { Header } from "../blocks/Header";
+import { Header } from "../../blocks/Header/Header";
 import { useSavedMedia } from "@/hooks/useSavedMedia";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
-import { MediaList } from "../blocks/MediaList";
-import { HelpBanner } from "../blocks/HelpBanner";
+import { MediaList } from "../MediaList/MediaList";
+import { HelpBanner } from "../../blocks/HelpBanner/HelpBanner";
+import {
+  collectionBoxSX,
+  mainStackSX,
+  paperSX,
+  tabsSX,
+  wishlistBoxSX,
+} from "./styles";
 
 type Tabs = "collection" | "wishlist";
 
@@ -41,7 +48,7 @@ export const LandingPage = () => {
   }
 
   return (
-    <Stack spacing={3} sx={{ px: { xs: 2, sm: 3, md: 0 } }}>
+    <Stack spacing={3} sx={mainStackSX}>
       <Header signOut />
 
       <Stack spacing={1}>
@@ -50,42 +57,34 @@ export const LandingPage = () => {
           savedItems={[...owned.items, ...wishlist.items]}
         />
       </Stack>
-      <PaddedPaper
-        sx={{
-          width: "100%",
-          maxWidth: layout === "list" ? "1000px" : "1200px",
-          alignSelf: "center",
-        }}
-      >
+      <PaddedPaper sx={paperSX(layout)}>
         <Stack spacing={3}>
           <Tabs
             value={openTab}
             onChange={handleOnChange}
             variant="fullWidth"
-            sx={{
-              "& .MuiTab-root": {
-                fontSize: { xs: "0.8rem", sm: "1.2rem" },
-              },
-            }}
+            sx={tabsSX}
           >
             <Tab value="collection" label="My Collection" />
             <Tab value="wishlist" label="My Wishlist" />
           </Tabs>
-          <Box sx={{ display: openTab === "collection" ? "block" : "none" }}>
+          <Box sx={collectionBoxSX(openTab)}>
             <MediaList
               title={localization.collection.title}
               {...owned}
               layout={layout}
               onLayoutChange={setLayout}
+              status="owned"
             />
           </Box>
-          <Box sx={{ display: openTab === "wishlist" ? "block" : "none" }}>
+          <Box sx={wishlistBoxSX(openTab)}>
             <MediaList
               title={localization.wishlist.title}
               {...wishlist}
               updateItem={handleWishlistUpdated}
               layout={layout}
               onLayoutChange={setLayout}
+              status="wishlist"
             />
           </Box>
         </Stack>

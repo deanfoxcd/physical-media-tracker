@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import localization from "@/locales/en";
 import { useMovieSearch } from "@/hooks/useSearch";
-import { ActionButton } from "./ActionButton";
-import { MediaCard } from "./MediaCard";
+import { ActionButton } from "../../blocks/ActionButton";
+import { SearchResultCard } from "../SearchResultCard/SearchResultCard";
 import { SavedMedia } from "@/types/media";
 import { TmdbMultiResult } from "@/types/tmdb";
 import { DEBOUNCE_MS, PREVIEW_LIMIT } from "@/constants/search";
+import { mainStackSX, paperSX, popperSX } from "./styles";
 
 interface SearchProps {
   onAdded?: (item: SavedMedia & { id: string }) => void;
@@ -62,7 +63,7 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
     <Stack
       ref={(node) => setAnchorEl(node as HTMLDivElement | null)}
       spacing={1}
-      sx={{ width: "100%", maxWidth: "700px", alignSelf: "center" }}
+      sx={mainStackSX}
     >
       <Typography>{localization.searchInstructions}</Typography>
 
@@ -99,7 +100,7 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
         open={dropdownOpen && query.trim() !== "" && previewResults.length > 0}
         anchorEl={anchorEl}
         placement="bottom-start"
-        sx={{ zIndex: (theme) => theme.zIndex.appBar }}
+        sx={popperSX}
         modifiers={[
           {
             name: "sameWidth",
@@ -113,10 +114,10 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
         ]}
       >
         <ClickAwayListener onClickAway={() => setDropdownOpen(false)}>
-          <Paper elevation={4} sx={{ p: 1, maxHeight: 500, overflowY: "auto" }}>
+          <Paper elevation={4} sx={paperSX}>
             <Stack spacing={1}>
               {previewResults.map((item) => (
-                <MediaCard
+                <SearchResultCard
                   key={item.id}
                   item={item}
                   onAdded={onAdded}

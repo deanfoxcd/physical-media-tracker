@@ -13,14 +13,23 @@ import {
   useTheme,
 } from "@mui/material";
 import { ViewList, GridView, Movie, LiveTv } from "@mui/icons-material";
-import { MediaCard } from "../blocks/MediaCard";
-import { MediaCardCompact } from "../blocks/MediaCardCompact";
+import { MediaCard } from "../MediaCard/MediaCard";
+import { MediaCardCompact } from "../MediaCardCompact/MediaCardCompact";
 import localization from "@/locales/en";
 import { SavedMedia, SavedMediaUpdates } from "@/types/media";
 import { useMemo, useState } from "react";
 import { SortOption } from "@/types/sort";
 import { sortSavedMedia } from "@/lib/sortMedia";
 import { SORT_OPTIONS } from "@/constants/sortOptions";
+import {
+  chipsStackSX,
+  chipsSX,
+  controlsStackSX,
+  gridStackSX,
+  layoutButtonsStackSX,
+  sortLabelSX,
+  toggleButtonSX,
+} from "./styles";
 
 interface MediaListProps {
   title: string;
@@ -30,6 +39,7 @@ interface MediaListProps {
   updateItem: (id: string, updates: SavedMediaUpdates) => void;
   layout: "grid" | "list";
   onLayoutChange: (layout: "grid" | "list") => void;
+  status: "owned" | "wishlist";
 }
 
 export const MediaList = ({
@@ -39,15 +49,19 @@ export const MediaList = ({
   updateItem,
   layout,
   onLayoutChange,
+  status,
 }: MediaListProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const toggleButtonSize = isMobile ? 40 : 56;
 
   const [sortOption, setSortOption] = useState<SortOption>("name-asc");
   const [mediaTypeFilter, setMediaTypeFilter] = useState<
     "movie" | "tv" | "all"
   >("all");
+  const sortOptions =
+    status === "wishlist"
+      ? SORT_OPTIONS.filter((option) => option.value.startsWith("name-"))
+      : SORT_OPTIONS;
   const movieCount = items.filter((item) => item.media_type === "movie").length;
   const tvShowCount = items.filter((item) => item.media_type === "tv").length;
 
@@ -75,16 +89,16 @@ export const MediaList = ({
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={2}
-        sx={{ justifyContent: "space-between" }}
+        sx={controlsStackSX}
       >
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Stack direction="row" spacing={1} sx={chipsStackSX}>
           <Chip
             icon={<Movie />}
             label={`${movieCount} movies`}
             onClick={() => toggleFilter("movie")}
             color={mediaTypeFilter === "movie" ? "primary" : "default"}
             variant={mediaTypeFilter === "movie" ? "filled" : "outlined"}
-            sx={{ px: 1, py: 1.5 }}
+            sx={chipsSX}
           />
           <Chip
             icon={<LiveTv />}
@@ -92,24 +106,20 @@ export const MediaList = ({
             onClick={() => toggleFilter("tv")}
             color={mediaTypeFilter === "tv" ? "primary" : "default"}
             variant={mediaTypeFilter === "tv" ? "filled" : "outlined"}
-            sx={{ px: 1, py: 1.5 }}
+            sx={chipsSX}
           />
         </Stack>
 
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={[isMobile && { justifyContent: "space-between" }]}
-        >
+        <Stack direction="row" spacing={1} sx={layoutButtonsStackSX(isMobile)}>
           <TextField
             select
             label="Sort by"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOption)}
-            sx={{ minWidth: 220 }}
+            sx={sortLabelSX}
             size={isMobile ? "small" : "medium"}
           >
-            {SORT_OPTIONS.map((option) => (
+            {sortOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -120,16 +130,10 @@ export const MediaList = ({
             exclusive
             onChange={(_, value) => value && onLayoutChange(value)}
           >
-            <ToggleButton
-              value="grid"
-              sx={{ width: toggleButtonSize, height: toggleButtonSize }}
-            >
+            <ToggleButton value="grid" sx={toggleButtonSX(isMobile)}>
               <GridView />
             </ToggleButton>
-            <ToggleButton
-              value="list"
-              sx={{ width: toggleButtonSize, height: toggleButtonSize }}
-            >
+            <ToggleButton value="list" sx={toggleButtonSX(isMobile)}>
               <ViewList />
             </ToggleButton>
           </ToggleButtonGroup>
@@ -139,18 +143,13 @@ export const MediaList = ({
       {sortedItems.length === 0 ? (
         <Typography>{localization.collection.empty}</Typography>
       ) : layout === "grid" ? (
-        <Stack
-          spacing={3}
-          direction="row"
-          sx={{ flexWrap: "wrap", justifyContent: "center" }}
-          useFlexGap
-        >
+        <Stack spacing={3} direction="row" sx={gridStackSX} useFlexGap>
           {sortedItems.map((item) => (
             <MediaCard
               key={item.id}
               savedItem={item}
-              onRemoved={removeItem}
               onUpdated={updateItem}
+              onRemoved={removeItem}
             />
           ))}
         </Stack>
@@ -161,6 +160,7 @@ export const MediaList = ({
               key={item.id}
               savedItem={item}
               onUpdated={updateItem}
+              onRemoved={removeItem}
             />
           ))}
         </Stack>
