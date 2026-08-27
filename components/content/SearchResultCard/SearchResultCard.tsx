@@ -23,6 +23,14 @@ import { fetchImdbId } from "@/lib/tmdbClient";
 import { FORMAT_OPTIONS } from "@/constants/formatOptions";
 import { POSTER_BASE } from "@/constants/poster";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  iconsStackSX,
+  innerStackSX,
+  mainStackSX,
+  resultTextSX,
+  textSX,
+  titleTextLinkSX,
+} from "./styles";
 
 interface SearchResultCardProps {
   item: TmdbMultiResult;
@@ -91,16 +99,9 @@ export const SearchResultCard = ({
             height={138}
           />
         )}
-        <Stack spacing={1} sx={{ flex: 1, minWidth: 0 }}>
-          <Button
-            onClick={() => console.log(item)}
-            sx={{
-              whiteSpace: "normal",
-              textAlign: "left",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography sx={{ wordBreak: "break-word" }}>
+        <Stack spacing={1} sx={mainStackSX}>
+          <Button onClick={() => console.log(item)} sx={titleTextLinkSX}>
+            <Typography sx={resultTextSX}>
               {item.media_type === "movie" ? item.title : item.name} (
               {(item.media_type === "movie"
                 ? item.release_date
@@ -110,23 +111,15 @@ export const SearchResultCard = ({
             </Typography>
           </Button>
           {existingStatus && (
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            <Typography variant="caption" sx={textSX}>
               {existingStatus === "owned"
                 ? "Also in your Collection"
                 : "Also in your Wishlist"}
             </Typography>
           )}
 
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-            }}
-          >
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          <Stack direction="row" spacing={2} sx={innerStackSX}>
+            <Stack direction="row" spacing={1} sx={iconsStackSX}>
               {item.media_type === "movie" ? <Movie /> : <LiveTv />}
             </Stack>
 
