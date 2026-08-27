@@ -9,6 +9,12 @@ import { SavedItemDialogs } from "../SavedItemDialogs";
 import { useSavedItemDialogs } from "@/hooks/useSavedItemDialogs";
 import { LiveTv, Movie } from "@mui/icons-material";
 import { PriceDisplay } from "../../blocks/PriceDisplay";
+import {
+  detailsStackSX,
+  iconsStackSX,
+  mainStackSX,
+  nameIconStackSX,
+} from "./styles";
 
 interface MediaCardCompactProps {
   savedItem: SavedMedia & { id: string };
@@ -29,7 +35,7 @@ export const MediaCardCompact = ({
       <Stack
         direction="row"
         spacing={2}
-        sx={{ alignItems: "center", cursor: "pointer" }}
+        sx={mainStackSX}
         onClick={dialogs.openPrimary}
       >
         {savedItem.poster_path && (
@@ -45,25 +51,21 @@ export const MediaCardCompact = ({
           />
         )}
 
-        <Stack spacing={1} sx={{ flexGrow: 1 }}>
+        <Stack spacing={1} sx={nameIconStackSX}>
           <Link href={imdbLink} onClick={(e) => e.stopPropagation()}>
             {savedItem.media_type === "movie"
               ? savedItem.title
               : savedItem.name}
           </Link>
 
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{ alignItems: "center", mt: "auto" }}
-          >
+          <Stack direction="row" spacing={1} sx={iconsStackSX}>
             {savedItem.media_type === "movie" ? <Movie /> : <LiveTv />}
             <Typography>{savedItem.format}</Typography>
           </Stack>
         </Stack>
 
         {savedItem.status === "owned" ? (
-          <Stack sx={{ justifyContent: "end", minWidth: 140 }}>
+          <Stack sx={detailsStackSX}>
             <Typography>{savedItem.acquiredFrom}</Typography>
             <Typography>{savedItem.acquiredDate}</Typography>
             <PriceDisplay price={savedItem.pricePaid ?? 0} />
