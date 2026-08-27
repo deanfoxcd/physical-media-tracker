@@ -6,6 +6,4 @@ export const FORMAT_OPTIONS: SavedMediaFields["format"][] = [
   "4K",
   "3D",
   "4K 3D",
-  "Digital",
-  "4K Digital",
 ];

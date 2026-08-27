@@ -5,7 +5,7 @@ export interface SavedMediaFields {
   imdbId: string | null;
   userId: string;
   status: "owned" | "wishlist";
-  format: "DVD" | "Blu-Ray" | "4K" | "3D" | "4K 3D" | "Digital" | "4K Digital";
+  format: "DVD" | "Blu-Ray" | "4K" | "3D" | "4K 3D";
   condition?: string;
   acquiredFrom?: string;
   acquiredDate?: string;

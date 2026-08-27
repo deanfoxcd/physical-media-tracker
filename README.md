@@ -6,9 +6,10 @@ A web app for tracking a physical movie and TV show collection – DVDs, Blu-Ray
 
 ---
 
-## 🚀 Live Demo
+## 🚀 Test Account
 
-👉 Coming soon
+- Email: test@test.com
+- Password: TestPassword808*
 
 ---
 
