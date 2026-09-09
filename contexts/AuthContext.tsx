@@ -82,10 +82,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   async function login(email: string, password: string) {
+    recordActivity();
     await signInWithEmailAndPassword(auth, email, password);
   }
 
   async function signUp(email: string, password: string) {
+    recordActivity();
     await createUserWithEmailAndPassword(auth, email, password);
   }
 

@@ -34,7 +34,7 @@ export const MediaCardCompact = ({
     <PaddedPaper>
       <Stack
         direction="row"
-        spacing={2}
+        spacing={{ xs: 1, sm: 2 }}
         sx={mainStackSX}
         onClick={dialogs.openPrimary}
       >

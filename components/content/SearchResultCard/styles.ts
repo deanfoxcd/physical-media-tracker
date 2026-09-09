@@ -9,13 +9,17 @@ export const titleTextLinkSX: SxProps = {
 export const mainStackSX: SxProps = { flex: 1, minWidth: 0 };
 
 export const innerStackSX: SxProps = {
-  alignItems: "center",
-  justifyContent: "space-between",
+  alignItems: "flex-start",
+  justifyContent: { xs: "flex-start", sm: "space-between" },
   flexWrap: "wrap",
 };
 
 export const iconsStackSX: SxProps = {
   alignItems: "center",
+};
+
+export const buttonsStackSX: SxProps = {
+  flexWrap: "wrap",
 };
 
 export const textSX: SxProps = {

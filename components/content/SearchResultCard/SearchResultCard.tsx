@@ -24,6 +24,7 @@ import { FORMAT_OPTIONS } from "@/constants/formatOptions";
 import { POSTER_BASE } from "@/constants/poster";
 import { useAuth } from "@/contexts/AuthContext";
 import {
+  buttonsStackSX,
   iconsStackSX,
   innerStackSX,
   mainStackSX,
@@ -118,12 +119,17 @@ export const SearchResultCard = ({
             </Typography>
           )}
 
-          <Stack direction="row" spacing={2} sx={innerStackSX}>
+          <Stack direction="row" spacing={2} sx={innerStackSX} useFlexGap>
             <Stack direction="row" spacing={1} sx={iconsStackSX}>
               {item.media_type === "movie" ? <Movie /> : <LiveTv />}
             </Stack>
 
-            <Stack direction="row" spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={buttonsStackSX}
+              useFlexGap
+            >
               <ActionButton
                 onClick={() => setWishlistDialogOpen(true)}
                 disabled={addingToWishlist || addedToWishlist}

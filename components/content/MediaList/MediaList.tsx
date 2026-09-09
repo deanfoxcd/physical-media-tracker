@@ -143,7 +143,12 @@ export const MediaList = ({
       {sortedItems.length === 0 ? (
         <Typography>{localization.collection.empty}</Typography>
       ) : layout === "grid" ? (
-        <Stack spacing={3} direction="row" sx={gridStackSX} useFlexGap>
+        <Stack
+          spacing={{ xs: 1, sm: 3 }}
+          direction="row"
+          sx={gridStackSX}
+          useFlexGap
+        >
           {sortedItems.map((item) => (
             <MediaCard
               key={item.id}

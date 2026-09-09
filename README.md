@@ -64,8 +64,6 @@ To run this project locally:
 
 ## ✅ To Do
 
-- Deploy to Vercel and connect a live demo link
-- Add automated tests
 - Continue polishing mobile responsiveness across remaining pages
 - Improve on styling and design
 - Add Search function for both Collection and Wishlist

@@ -24,6 +24,7 @@ export async function addSavedMedia(
     );
     return { ...item, id: docRef.id };
   } catch (err) {
+    console.error(err);
     showToast("Failed to save item. Please try again.", "error");
     throw err;
   }
@@ -40,6 +41,7 @@ export async function getAllSavedMedia(
       ...(d.data() as SavedMedia),
     }));
   } catch (err) {
+    console.error(err);
     showToast("Failed to load your media. Please try again.", "error");
     throw err;
   }
@@ -61,6 +63,7 @@ export async function getSavedMediaByStatus(
       ...(d.data() as SavedMedia),
     }));
   } catch (err) {
+    console.error(err);
     showToast("Failed to load your media. Please try again.", "error");
     throw err;
   }
@@ -75,6 +78,7 @@ export async function updateSavedMedia(
     await updateDoc(doc(db, "savedMedia", id), updates);
     showToast(message);
   } catch (err) {
+    console.error(err);
     showToast("Failed to update item. Please try again.", "error");
     throw err;
   }
@@ -84,6 +88,7 @@ export async function deleteSavedMedia(id: string) {
   try {
     await deleteDoc(doc(db, "savedMedia", id));
   } catch (err) {
+    console.error(err);
     showToast("Failed to remove item. Please try again.", "error");
     throw err;
   }

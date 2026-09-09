@@ -37,6 +37,7 @@ export const MediaCard = ({
 }: MediaCardProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallMobile = useMediaQuery(theme.breakpoints.down(400));
 
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [moveToCollectionOpen, setMoveToCollectionOpen] = useState(false);
@@ -60,15 +61,13 @@ export const MediaCard = ({
     setMoveToCollectionOpen(false);
   }
 
-  const posterWidth = isMobile ? 140 : 154;
-  const posterHeight = isMobile ? 210 : 231;
+  const posterWidth = isSmallMobile ? 140 : isMobile ? 90 : 154;
+  const posterHeight = isSmallMobile ? 210 : isMobile ? 135 : 231;
+  const cardWidth = isSmallMobile ? 136 : isMobile ? 100 : 180;
 
-  return (
-    <PaddedPaper>
-      <Stack
-        spacing={1}
-        sx={{ width: isMobile ? 136 : 180, alignItems: "center" }}
-      >
+  const content = (
+    <>
+      <Stack spacing={1} sx={{ width: cardWidth, alignItems: "center" }}>
         {savedItem.poster_path && (
           <Box
             onClick={() =>
@@ -155,6 +154,8 @@ export const MediaCard = ({
           />
         </DialogContent>
       </Dialog>
-    </PaddedPaper>
+    </>
   );
+
+  return isMobile ? content : <PaddedPaper>{content}</PaddedPaper>;
 };
