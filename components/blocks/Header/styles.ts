@@ -13,7 +13,9 @@ export const mainBoxSX: SxProps = {
 };
 
 export const pageTitleSX: SxProps = {
-  color: "black",
+  color: "primary.main",
+  fontWeight: 700,
+  letterSpacing: "0.02em",
   fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3.75rem" },
   gridColumn: { xs: "1", sm: "2" },
   justifySelf: { xs: "start", sm: "center" },

@@ -11,3 +11,9 @@ export const popperSX: SxProps<Theme> = (theme) => ({
 });
 
 export const paperSX: SxProps = { p: 1, maxHeight: 500, overflowY: "auto" };
+
+export const searchFieldSX: SxProps = {
+  "& .MuiOutlinedInput-root": {
+    bgcolor: "#FDFBF6",
+  },
+};

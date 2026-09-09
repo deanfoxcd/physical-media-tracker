@@ -58,7 +58,7 @@ export const LandingPage = () => {
         />
       </Stack>
       <PaddedPaper sx={paperSX(layout)}>
-        <Stack spacing={3}>
+        <Stack spacing={0}>
           <Tabs
             value={openTab}
             onChange={handleOnChange}
