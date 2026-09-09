@@ -1,5 +1,5 @@
 const en = {
-  pageTitle: "Physical Media Tracker",
+  pageTitle: "Reel Shelf",
   collectionButton: "My Collection",
   wishlistButton: "Wishlist",
   searchInstructions: "Find a movie or show:",

@@ -1,4 +1,4 @@
-# 🎬 Physical Media Collection Tracker
+# 🎬 Reel Shelf
 
 [![Status](https://img.shields.io/badge/Status-In%20Progress-orange?style=flat-square)](https://github.com/deanfoxcd/physical-media-tracker)
 

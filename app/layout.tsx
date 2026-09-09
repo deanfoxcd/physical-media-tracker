@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Physical Media Tracker",
+  title: "Reel Shelf",
   description: "Track your physical media collection",
 };
 
