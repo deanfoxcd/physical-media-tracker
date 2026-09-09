@@ -149,12 +149,13 @@ export const MediaList = ({
           sx={gridStackSX}
           useFlexGap
         >
-          {sortedItems.map((item) => (
+          {sortedItems.map((item, index) => (
             <MediaCard
               key={item.id}
               savedItem={item}
               onUpdated={updateItem}
               onRemoved={removeItem}
+              priority={index < 6}
             />
           ))}
         </Stack>

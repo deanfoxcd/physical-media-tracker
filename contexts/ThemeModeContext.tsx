@@ -28,7 +28,21 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
     if (stored === "light" || stored === "dark") {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setMode(stored);
+      return;
     }
+
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    setMode(query.matches ? "dark" : "light");
+
+    function handleChange(e: MediaQueryListEvent) {
+      // Only follow the OS live if the user hasn't manually chosen a mode.
+      if (!localStorage.getItem(THEME_MODE_KEY)) {
+        setMode(e.matches ? "dark" : "light");
+      }
+    }
+
+    query.addEventListener("change", handleChange);
+    return () => query.removeEventListener("change", handleChange);
   }, []);
 
   function toggleMode() {

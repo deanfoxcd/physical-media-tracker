@@ -67,7 +67,6 @@ To run this project locally:
 - Continue polishing mobile responsiveness across remaining pages
 - Improve on styling and design
 - Add Search function for both Collection and Wishlist
-- Dark Mode
 - Format filter
 
 ---

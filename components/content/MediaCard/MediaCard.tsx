@@ -28,12 +28,14 @@ interface MediaCardProps {
   savedItem: SavedMedia & { id: string };
   onUpdated?: (id: string, updates: SavedMediaUpdates) => void;
   onRemoved?: (id: string) => void;
+  priority?: boolean;
 }
 
 export const MediaCard = ({
   savedItem,
   onUpdated,
   onRemoved,
+  priority,
 }: MediaCardProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -86,6 +88,7 @@ export const MediaCard = ({
               }
               width={posterWidth}
               height={posterHeight}
+              priority={priority}
             />
           </Box>
         )}
