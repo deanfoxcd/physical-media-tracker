@@ -1,15 +1,15 @@
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
 export const toggleButtonSize = (isMobile: boolean) => (isMobile ? 40 : 56);
 
-export const controlsStackSX: SxProps = {
+export const controlsStackSX: SxProps<Theme> = (theme) => ({
   justifyContent: "space-between",
-  bgcolor: "#FDFBF6",
-  border: "1px solid #EDE6D8",
+  bgcolor: theme.palette.background.paper,
+  border: `1px solid ${theme.palette.divider}`,
   borderBottomLeftRadius: "10px",
   borderBottomRightRadius: "10px",
   p: 2,
-};
+});
 
 export const chipsStackSX: SxProps = { alignItems: "center" };
 

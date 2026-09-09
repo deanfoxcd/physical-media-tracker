@@ -17,7 +17,7 @@ import { SearchResultCard } from "../SearchResultCard/SearchResultCard";
 import { SavedMedia } from "@/types/media";
 import { TmdbMultiResult } from "@/types/tmdb";
 import { DEBOUNCE_MS, PREVIEW_LIMIT } from "@/constants/search";
-import { mainStackSX, paperSX, popperSX, searchFieldSX } from "./styles";
+import { mainStackSX, paperSX, popperSX } from "./styles";
 
 interface SearchProps {
   onAdded?: (item: SavedMedia & { id: string }) => void;
@@ -73,7 +73,6 @@ export const Search = ({ onAdded, savedItems }: SearchProps) => {
           variant="outlined"
           value={query}
           size="small"
-          sx={searchFieldSX}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

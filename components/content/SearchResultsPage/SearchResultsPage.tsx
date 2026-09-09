@@ -9,7 +9,7 @@ import { ActionButton } from "../../blocks/ActionButton";
 import { Header } from "../../blocks/Header/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoginPage } from "../LoginPage/LoginPage";
-import { loadingStackSX, searchFieldSX } from "./styles";
+import { loadingStackSX } from "./styles";
 
 interface SearchResultsPageProps {
   initialQuery: string;
@@ -48,7 +48,6 @@ export const SearchResultsPage = ({ initialQuery }: SearchResultsPageProps) => {
           label={localization.search.label}
           variant="outlined"
           value={query}
-          sx={searchFieldSX}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && search()}
         />

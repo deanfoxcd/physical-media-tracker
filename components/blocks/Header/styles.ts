@@ -22,6 +22,8 @@ export const pageTitleSX: SxProps = {
 };
 
 export const profileIconBoxSX: SxProps = {
+  display: "flex",
+  alignItems: "center",
   gridColumn: { xs: "2", sm: "3" },
   justifySelf: "end",
 };

@@ -4,8 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import "./globals.css";
 import { Toaster } from "@/components/blocks/Toaster";
 import { ScrollToTopButton } from "@/components/blocks/ScrollToTopButton/ScrollToTopButton";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "@/lib/theme";
+import { ThemeModeProvider } from "@/contexts/ThemeModeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
@@ -31,13 +30,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <AppRouterCacheProvider>
-          <AuthProvider>
-            <ThemeProvider theme={theme}>
+          <ThemeModeProvider>
+            <AuthProvider>
               {children}
               <Toaster />
               <ScrollToTopButton />
-            </ThemeProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </ThemeModeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
